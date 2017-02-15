@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
 
         if( sharedPreferences.getBoolean("isLoggedIn", false)){
             launchMainActivity();
@@ -202,6 +202,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask.execute((Void) null);
         }
 
+        sharedPreferences.edit().putString("email", mEmailView.getText().toString());
         launchMainActivity();
     }
 
@@ -364,12 +365,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void launchMainActivity(){
         sharedPreferences.edit().putBoolean("isLoggedIn", true).apply();
-
-        String username = "Ahmed";
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("username", username);
         startActivity(intent);
-
+        finish();
     }
 }
 

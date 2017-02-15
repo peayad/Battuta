@@ -1,13 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_trip_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="iti_edu.battuta.TripInfoActivity">
 
-</RelativeLayout>
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        style="@android:style/Widget.Holo.ScrollView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+
+
+                <TextView
+                    android:textColor="#0040ff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text="title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:ems="10"
+                    android:id="@+id/edTitle" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:text="location"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/txLocation" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+
+                    <TextView
+                        android:text="start"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:layout_width="106dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:id="@+id/txStart" />
+
+                    <TextView
+                        android:text=" "
+                        android:textColor="#0040ff"
+                        android:layout_width="245dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/autoCompleteStart" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+
+                    <TextView
+                        android:text="End"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:layout_width="106dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:id="@+id/txEnd" />
+
+                    <TextView
+                        android:text=" "
+                        android:layout_width="245dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="#0040ff"
+                        android:id="@+id/autoCompleteEnd" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="371dp"
+                android:layout_height="49dp"
+                android:orientation="horizontal" >
+
+
+                <TextView
+                    android:text="Data"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_width="106dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/txData" />
+                <TextView
+                    android:text="  "
+                    android:textColor="#0040ff"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/txDatapicker" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal" >
+
+
+                <TextView
+                    android:text="Time"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_width="106dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/txTime" />
+
+                <TextView
+                    android:text="  "
+                    android:textColor="#0040ff"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/txTimepicker" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="Notes"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/txNote" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@android:style/Widget.Holo.ScrollView">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <EditText
+
+                            android:layout_width="match_parent"
+                            android:layout_height="84dp"
+                            android:inputType="textPersonName"
+                            android:text=" "
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:ems="10"
+                            android:id="@+id/txNotes"
+                            android:textColor="#0040ff"
+                            />
+                    </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:layout_width="38dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/imageEdit"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="290dp"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
