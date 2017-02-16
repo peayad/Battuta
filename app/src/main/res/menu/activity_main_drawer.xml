@@ -2,30 +2,38 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Trips" >
+    <item android:title="@string/trips" >
         <menu >
             <group >
-                <item android:title="Upcoming"
-                    android:id="@+id/nav_upcoming" />
-                <item android:title="Passed"
-                    android:id="@+id/nav_passed" />
+                <item android:title="@string/upcoming"
+                    android:id="@+id/nav_upcoming"
+                    android:icon="@android:drawable/ic_media_play" />
+                <item android:title="@string/passed"
+                    android:id="@+id/nav_passed"
+                    android:icon="@android:drawable/ic_media_rew" />
             </group>
         </menu>
     </item>
 
-    <item android:title="Settings" >
+    <item android:title="@string/settings" >
         <menu >
-            <item android:title="Languages"
-                android:id="@+id/nav_languages" />
+            <item android:title="@string/sync"
+                android:id="@+id/nav_sync"
+                android:icon="@android:drawable/ic_popup_sync" />
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item android:title="About"
-                android:id="@+id/nav_about" />
+                android:title="@string/share" />
+            <item android:title="@string/about"
+                android:id="@+id/nav_about"
+                android:icon="@android:drawable/ic_dialog_info" />
+            <item android:title="@string/languages"
+                android:id="@+id/nav_languages"
+                android:icon="@android:drawable/ic_menu_mapmode" />
         </menu>
     </item>
-    <item android:title="Logout"
-        android:id="@+id/nav_logout" />
+    <item android:title="@string/logout"
+        android:id="@+id/nav_logout"
+        android:icon="@android:drawable/ic_menu_revert" />
 
 </menu>

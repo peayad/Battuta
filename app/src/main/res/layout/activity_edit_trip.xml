@@ -23,24 +23,16 @@
                 android:orientation="vertical"
                 >
 
-                <CheckBox
-                    android:text=" "
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/checkBox"
-
-                    android:layout_weight="1" />
-
 
                 <EditText
                     android:textColor="#0040ff"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:text="title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:ems="10"
-                    android:id="@+id/edTitle" />
+                    android:id="@+id/edTitle"
+                    android:hint="Title" />
             </LinearLayout>
 
             <LinearLayout
@@ -79,7 +71,8 @@
                         android:textColor="#0040ff"
                         android:layout_width="245dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/autoCompleteStart" />
+                        android:id="@+id/autoCompleteStart"
+                        android:hint="Start Location" />
 
                 </LinearLayout>
                 <LinearLayout
@@ -102,7 +95,8 @@
                         android:layout_width="245dp"
                         android:layout_height="wrap_content"
                         android:textColor="#0040ff"
-                        android:id="@+id/autoCompleteEnd" />
+                        android:id="@+id/autoCompleteEnd"
+                        android:hint="Destienation" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -219,17 +213,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <ImageButton
-                    android:layout_width="38dp"
-                    android:layout_height="35dp"
-                    android:id="@+id/imageEdit"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="290dp"/>
 
 
             </LinearLayout>
+
+            <Button
+                android:text="Save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button4" />
 
         </LinearLayout>
     </ScrollView>

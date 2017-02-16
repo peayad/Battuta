@@ -200,10 +200,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
+
+            sharedPreferences.edit().putString("email", mEmailView.getText().toString());
+            launchMainActivity();
         }
 
-        sharedPreferences.edit().putString("email", mEmailView.getText().toString());
-        launchMainActivity();
     }
 
     private boolean isEmailValid(String email) {

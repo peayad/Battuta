@@ -22,7 +22,7 @@
         android:layout_marginTop="10dp" />
 
     <TextView
-        android:text="It was developed by:"
+        android:text="@string/it_was_developed_by"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/aboutDeveloped"
@@ -30,7 +30,7 @@
         android:layout_marginTop="10dp" />
 
     <TextView
-        android:text="Fatma Ali"
+        android:text="@string/fatma_ali"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/fatma"

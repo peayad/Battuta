@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,16 +20,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     SharedPreferences loginPreferences;
+
+    boolean doubleBackToExitPressedOnce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         loginPreferences = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
 
         setContentView(R.layout.activity_main);
@@ -51,6 +64,29 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        // trying CachedAdapter
+        final String[] values = new String[25];
+        for(int i = 0;i<values.length;i++){
+            values[i] = "" + i;
+        }
+
+        ListView myListView;
+        CashedAdapter myCashedAdapter = new CashedAdapter(getApplicationContext(), values);
+
+        myListView = (ListView) findViewById(R.id.mainListView);
+        myListView.setAdapter(myCashedAdapter);
+
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), TripInfoActivity.class);
+                intent.putExtra("id", position);
+                startActivity(intent);
+//                Toast.makeText(getApplicationContext(), "You picked " + values[position], Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
@@ -59,7 +95,23 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+
+
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
         }
     }
 
@@ -92,24 +144,35 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_upcoming) {
+            // TODO - change list view items
 
         } else if (id == R.id.nav_passed) {
+            // TODO - change list view items
 
-        } else if (id == R.id.nav_languages) {
+        } else if (id == R.id.nav_sync) {
+            // TODO - sync data with firebase
+            Toast.makeText(getApplicationContext(),"Should Sync with Firebase later :)", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_share) {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_TEXT, "Battuta Play Store Link");
+            intent.setType("text/plain");
+            startActivity(Intent.createChooser(intent, "Share App"));
 
         } else if (id == R.id.nav_about) {
-
             AppCompatDialog aboutDialog = new AppCompatDialog(this);
             aboutDialog.setTitle("About!");
             aboutDialog.setContentView(R.layout.about_dialog);
             aboutDialog.show();
 
+        } else if (id == R.id.nav_languages) {
+            // TODO - show dialoge
+
+
         }else if (id == R.id.nav_logout){
             SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
             sharedPreferences.edit().putBoolean("isLoggedIn", false).apply();
-
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             finish();
