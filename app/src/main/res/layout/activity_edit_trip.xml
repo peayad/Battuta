@@ -1,230 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_edit_trip"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="iti_edu.battuta.EditTripActivity">
+    android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="wrap_content"
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="@android:style/Widget.Holo.ScrollView">
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
+            android:id="@+id/activity_edit_trip"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            >
-            <LinearLayout
+            tools:context="iti_edu.battuta.EditTripActivity">
+
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-
-
-                <EditText
-                    android:textColor="#0040ff"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:ems="10"
-                    android:id="@+id/edTitle"
-                    android:hint="Title" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-
-                <TextView
-                    android:text="location"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true"
-                    android:id="@+id/txLocation" />
-
+                android:layout_height="match_parent"
+                style="@android:style/Widget.Holo.ScrollView">
 
                 <LinearLayout
+                    android:id="@+id/edit_trip_form"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
+                    android:orientation="vertical">
 
-
-                    <TextView
-                        android:text="start"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:layout_width="106dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentStart="true"
-                        android:id="@+id/txStart" />
-
-                    <AutoCompleteTextView
-                        android:text=" "
-                        android:textColor="#0040ff"
-                        android:layout_width="245dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/autoCompleteStart"
-                        android:hint="Start Location" />
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-
-
-                    <TextView
-                        android:text="End"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:layout_width="106dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentStart="true"
-                        android:id="@+id/txEnd" />
-
-                    <AutoCompleteTextView
-                        android:text=" "
-                        android:layout_width="245dp"
-                        android:layout_height="wrap_content"
-                        android:textColor="#0040ff"
-                        android:id="@+id/autoCompleteEnd"
-                        android:hint="Destienation" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="371dp"
-                android:layout_height="49dp"
-                android:orientation="horizontal" >
-
-
-                <TextView
-                    android:text="Data"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:layout_width="106dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true"
-                    android:id="@+id/txData" />
-
-                <TextView
-                    android:text="  "
-                    android:textColor="#0040ff"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true"
-                    android:id="@+id/txDatapicker" />
-
-                <ImageButton
-                    android:layout_width="53dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageButton"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:orientation="horizontal" >
-
-
-                <TextView
-                    android:text="Time"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:layout_width="106dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true"
-                    android:id="@+id/txTime" />
-
-                <TextView
-                    android:text="  "
-                    android:textColor="#0040ff"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true"
-                    android:id="@+id/txTimepicker" />
-
-                <ImageButton
-                    android:layout_width="53dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageTime"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"/>
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:text="Notes"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true"
-                    android:id="@+id/txNote" />
-
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@android:style/Widget.Holo.ScrollView">
-
-                    <LinearLayout
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
 
                         <EditText
-
                             android:layout_width="match_parent"
-                            android:layout_height="84dp"
-                            android:inputType="textPersonName"
-                            android:text=" "
-                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:layout_height="wrap_content"
                             android:ems="10"
-                            android:id="@+id/edNotes"
-                            android:textColor="#0040ff"
-                            />
+                            android:id="@+id/edit_title"
+                            android:layout_weight="1"
+                            android:hint="Title"
+                            android:singleLine="true"
+                            android:textColor="@android:color/white"
+                            android:textSize="24sp"
+                            android:editable="false" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:id="@+id/edit_startPoint"
+                            android:layout_weight="1"
+                            android:hint="Starting Location"
+                            android:singleLine="true"
+                            android:editable="false" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:id="@+id/edit_endPoint"
+                            android:layout_weight="1"
+                            android:hint="Destination"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:id="@+id/edit_date_time"
+                            android:layout_weight="1"
+                            android:hint="Date and Time"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:isScrollContainer="true">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:id="@+id/edit_notes"
+                            android:layout_weight="1"
+                            android:hint="Notes"
+                            android:maxLines="3"
+                            android:singleLine="false" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Switch
+                        android:text="RoundTrip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/switch2"
+                        android:layout_weight="1"
+                        android:textAppearance="@style/TextAppearance.AppCompat"
+                        android:textSize="18sp"
+                        android:layout_marginTop="16dp" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <Button
+                            android:text="Cancel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/button2"
+                            android:layout_weight="1"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp" />
+
+                        <Button
+                            android:id="@+id/edit_btnSave"
+                            style="?android:textAppearanceSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Save"
+                            android:textStyle="bold"
+                            android:layout_weight="1"
+                            android:textColor="@android:color/black"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:onClick="findPlace"/>
                     </LinearLayout>
-                </ScrollView>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
 
-            </LinearLayout>
+                </LinearLayout>
 
-            <Button
-                android:text="Save"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/button4" />
+            </ScrollView>
+
 
         </LinearLayout>
-    </ScrollView>
-
-
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>
