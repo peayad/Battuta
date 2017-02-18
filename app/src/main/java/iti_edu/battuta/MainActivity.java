@@ -23,6 +23,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -30,12 +32,8 @@ public class MainActivity extends AppCompatActivity
     final static private int ADD_TRIP_REQUEST = 0;
 
     private CashedAdapter myCashedAdapter;
-
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-
-    String[] values;
+    private BattutaDBhelper myDBhelper;
+    private ArrayList<String> titles = new ArrayList<>();;
 
     SharedPreferences loginPreferences;
 
@@ -69,26 +67,19 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        myDBhelper = new BattutaDBhelper(getApplicationContext());
+        titles = myDBhelper.getAllTrips();
+        myCashedAdapter = new CashedAdapter(getApplicationContext(), titles);
 
-        // trying CachedAdapter
-        values = new String[25];
-        for(int i = 0;i<values.length;i++){
-            values[i] = "" + i;
-        }
-
-        ListView myListView;
-        myCashedAdapter = new CashedAdapter(getApplicationContext(), values);
-
-        myListView = (ListView) findViewById(R.id.mainListView);
+        ListView myListView = (ListView) findViewById(R.id.mainListView);
         myListView.setAdapter(myCashedAdapter);
 
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), TripInfoActivity.class);
-                intent.putExtra("title", values[position]);
+                intent.putExtra("title", titles.get(position));
                 startActivity(intent);
-//                Toast.makeText(getApplicationContext(), "You picked " + values[position], Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -114,7 +105,7 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 public void run() {
-                    doubleBackToExitPressedOnce=false;
+                    doubleBackToExitPressedOnce = false;
                 }
             }, 2000);
         }
@@ -161,7 +152,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_sync) {
             // TODO - sync data with firebase
-            Toast.makeText(getApplicationContext(),"Should Sync with Firebase later :)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Should Sync with Firebase later :)", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_share) {
             Intent intent = new Intent(Intent.ACTION_SEND);
@@ -179,9 +170,12 @@ public class MainActivity extends AppCompatActivity
             // TODO - show dialoge
 
 
-        }else if (id == R.id.nav_logout){
+        } else if (id == R.id.nav_logout) {
             SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
             sharedPreferences.edit().putBoolean("isLoggedIn", false).apply();
+
+            myDBhelper.deleteTable();
+
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             finish();
@@ -194,12 +188,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == ADD_TRIP_REQUEST){
-            if(resultCode == RESULT_OK){
-                values[0] = data.getStringExtra("title");
-                myCashedAdapter.notifyDataSetChanged();
-                Log.i(TAG, values[0]);
+        if (requestCode == ADD_TRIP_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                String newTitle = data.getStringExtra("title");
+                myDBhelper.insertTrip(newTitle);
+                titles = myDBhelper.getAllTrips();
+                myCashedAdapter.add(newTitle);
             }
         }
     }

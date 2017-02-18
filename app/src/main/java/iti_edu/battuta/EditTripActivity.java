@@ -170,12 +170,16 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         saveTripBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String extraString = titleET.getText().toString();
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("title", extraString);
-                Log.i(TAG, extraString);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
+                if(titleET.getText().toString() != null) {
+                    String extraString = titleET.getText().toString();
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("title", extraString);
+                    Log.i(TAG, extraString);
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }else{
+                    Toast.makeText(getApplicationContext(),"Please, enter trip title", Toast.LENGTH_SHORT);
+                }
             }
         });
 
