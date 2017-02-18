@@ -79,6 +79,18 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginLeft="5dp" />
 
+                    <Switch
+                        android:text="RoundTrip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/switch2"
+                        android:layout_weight="1"
+                        android:textAppearance="@style/TextAppearance.AppCompat"
+                        android:textSize="18sp"
+                        android:layout_marginTop="16dp"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:layout_marginLeft="5dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -111,18 +123,6 @@
 
                     </android.support.design.widget.TextInputLayout>
 
-                    <Switch
-                        android:text="RoundTrip"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/switch2"
-                        android:layout_weight="1"
-                        android:textAppearance="@style/TextAppearance.AppCompat"
-                        android:textSize="18sp"
-                        android:layout_marginTop="16dp"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:layout_marginLeft="5dp" />
-
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -146,7 +146,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:text="Start Trip"
-                            android:textStyle="bold"
                             android:layout_weight="1"
                             android:textColor="@android:color/black"
                             android:layout_marginLeft="16dp"

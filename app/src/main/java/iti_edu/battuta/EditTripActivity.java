@@ -1,6 +1,8 @@
 package iti_edu.battuta;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -53,17 +55,26 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         startTripBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-//                Intent intent = new Intent();
-//                intent.setAction(Intent.ACTION_MAIN);
-//                intent.addCategory(Intent.CATEGORY_APP_MAPS);
-//                intent.setData();
-////                intent.setCa CATEGORY_APP_MAPS, "Battuta Play Store Link");
-//                startActivity(Intent.createChooser(intent, "Start Google Maps"));
+                if (startPlace == null) {
+                    Toast.makeText(getApplicationContext(), "Please, select your starting point", Toast.LENGTH_SHORT).show();
+                } else if (endPlace == null) {
+                    Toast.makeText(getApplicationContext(), "Please, select your destination", Toast.LENGTH_SHORT).show();
+                } else {
+                    Uri directionsURI = getDirectionsURI(startPlace, endPlace);
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW, directionsURI);
+                    startActivity(intent);
+                }
             }
         });
 
+    }
+
+    Uri getDirectionsURI(Place sPlace, Place ePlace) {
+        // http://maps.google.com/maps?saddr= lat,long &daddr= lat,long
+        String startLatLng = startPlace.getLatLng().latitude + "," + startPlace.getLatLng().longitude;
+        String endLatLng = endPlace.getLatLng().latitude + "," + endPlace.getLatLng().longitude;
+        Uri directionURI = Uri.parse("http://maps.google.com/maps?saddr=" + startLatLng + "&daddr=" + endLatLng);
+        return directionURI;
     }
 
     @Override
