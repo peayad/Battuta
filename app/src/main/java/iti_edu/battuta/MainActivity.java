@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,6 +28,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "ptr-main";
     final static private int ADD_TRIP_REQUEST = 0;
+    final static private int TRIP_INFO_REQUEST = 1;
 
     private CashedAdapter myCashedAdapter;
     private BattutaDBhelper myDBhelper;
@@ -195,6 +194,8 @@ public class MainActivity extends AppCompatActivity
                 titles = myDBhelper.getAllTrips();
                 myCashedAdapter.add(newTitle);
             }
+        }else if(requestCode == TRIP_INFO_REQUEST){
+
         }
     }
 }

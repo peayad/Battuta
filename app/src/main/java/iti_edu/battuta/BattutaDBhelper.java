@@ -64,6 +64,13 @@ public class BattutaDBhelper extends SQLiteOpenHelper {
         return db.delete(TABLE_NAME, ID + " = ? ", new String[]{Integer.toString(id)});
     }
 
+    public void deleteTrip(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+        String selection = ID + " = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+        db.delete(TABLE_NAME, selection, selectionArgs);
+    }
+
     public ArrayList<String> getAllTrips() {
         ArrayList<String> array_list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();

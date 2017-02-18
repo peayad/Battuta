@@ -3,6 +3,8 @@ package iti_edu.battuta;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class TripInfoActivity extends AppCompatActivity {
@@ -17,20 +19,26 @@ public class TripInfoActivity extends AppCompatActivity {
 
         String title = intent.getStringExtra("title");
         TextView tv;
-        tv = (TextView) findViewById(R.id.info_edTitle);
-        tv.setText("Trip num: " + title);
 
-        tv = (TextView) findViewById(R.id.info_start);
-        tv.setText("stPt num: " + title);
+        tv = (TextView) findViewById(R.id.info_titleTV);
+        tv.setText(title);
 
-        tv = (TextView) findViewById(R.id.info_end);
-        tv.setText("edPt num: " + title);
+        tv = (TextView) findViewById(R.id.info_startTV);
+        tv.setText("stPt: " + title);
 
-        tv = (TextView) findViewById(R.id.info_date);
-        tv.setText("date num: " + title);
+        tv = (TextView) findViewById(R.id.info_endTV);
+        tv.setText("edPt: " + title);
 
-        tv = (TextView) findViewById(R.id.info_time);
-        tv.setText("time num: " + title);
+        tv = (TextView) findViewById(R.id.info_dateTimeTV);
+        tv.setText("date/time: " + title);
+
+        Button deleteBtn = (Button) findViewById(R.id.info_deleteTripBtn);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
     }
 }
