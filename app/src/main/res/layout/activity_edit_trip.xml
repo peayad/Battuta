@@ -102,7 +102,8 @@
                             android:id="@+id/edit_date_time"
                             android:layout_weight="1"
                             android:hint="Date and Time"
-                            android:singleLine="true" />
+                            android:singleLine="true"
+                            android:focusableInTouchMode="false" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -130,7 +131,7 @@
                         android:layout_weight="1">
 
                         <Button
-                            android:text="Save Trip"
+                            android:text="@string/save_trip"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/edit_btnSaveTrip"
@@ -145,7 +146,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:text="Start Trip"
+                            android:text="@string/start_trip"
                             android:layout_weight="1"
                             android:textColor="@android:color/black"
                             android:layout_marginLeft="16dp"

@@ -41,4 +41,6 @@
     <string name="title">Title</string>
     <string name="start">Start</string>
     <string name="end">End</string>
+    <string name="save_trip">Save Trip</string>
+    <string name="start_trip">Start Trip</string>
 </resources>
