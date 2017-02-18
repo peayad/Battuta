@@ -25,11 +25,16 @@ public class Trip {
         this.notes = notes;
     }
 
-    public Trip(int id, String title, String startPoint, String endPoint){
-        this.id = id;
+    public Trip(String title, String startPoint, String endPoint, String date,String time, int isRound, int isDone, String notes)
+    {
         this.title = title;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
+        this.date = date;
+        this.time = time;
+        this.isRound = isRound;
+        this.isDone = isDone;
+        this.notes = notes;
     }
 
     public void setId(int id){

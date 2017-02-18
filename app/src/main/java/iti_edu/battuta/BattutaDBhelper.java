@@ -64,11 +64,18 @@ public class BattutaDBhelper extends SQLiteOpenHelper {
         return db.delete(TABLE_NAME, ID + " = ? ", new String[]{Integer.toString(id)});
     }
 
-    public void deleteTrip(int id) {
+    public void deleteTrip(String title) {
         SQLiteDatabase db = getWritableDatabase();
-        String selection = ID + " = ?";
-        String[] selectionArgs = {String.valueOf(id)};
-        db.delete(TABLE_NAME, selection, selectionArgs);
+//        String selection = TITLE + " = ?";
+//        String[] selectionArgs = {title};
+//        db.delete(TABLE_NAME, selection, selectionArgs);
+        ArrayList<String> myArray = getAllTrips();
+
+        deleteTable();
+        for (int i = 0;i<myArray.size();i++){
+            if (myArray.get(i) == title) continue;
+            insertTrip(myArray.get(i));
+        }
     }
 
     public ArrayList<String> getAllTrips() {
@@ -81,6 +88,8 @@ public class BattutaDBhelper extends SQLiteOpenHelper {
             int currentIndex = cur.getColumnIndex(TITLE);
             String currentString = cur.getString(currentIndex);
             array_list.add(currentString);
+
+            Log.i(TAG, currentString);
         }
 
         return array_list;

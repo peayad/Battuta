@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), TripInfoActivity.class);
                 intent.putExtra("title", titles.get(position));
-                startActivity(intent);
+                startActivityForResult(intent, TRIP_INFO_REQUEST);
             }
         });
 
@@ -148,6 +149,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_passed) {
             // TODO - change list view items
+            Toast.makeText(getApplicationContext(), "Should Sync with Firebase later :)", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_sync) {
             // TODO - sync data with firebase
@@ -195,7 +197,12 @@ public class MainActivity extends AppCompatActivity
                 myCashedAdapter.add(newTitle);
             }
         }else if(requestCode == TRIP_INFO_REQUEST){
-
+            String title = getIntent().getStringExtra("title");
+            myDBhelper.deleteTrip(title);
+            titles.remove(title);
+            titles = myDBhelper.getAllTrips();
+            myCashedAdapter.clear();
+            myCashedAdapter.addAll(titles);
         }
     }
 }
