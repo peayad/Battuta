@@ -15,22 +15,22 @@ public class TripInfoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent == null) return;
 
-        int position = intent.getIntExtra("id", 9999);
+        String title = intent.getStringExtra("title");
         TextView tv;
         tv = (TextView) findViewById(R.id.info_edTitle);
-        tv.setText("Trip num: " + position);
+        tv.setText("Trip num: " + title);
 
         tv = (TextView) findViewById(R.id.info_start);
-        tv.setText("stPt num: " + position);
+        tv.setText("stPt num: " + title);
 
         tv = (TextView) findViewById(R.id.info_end);
-        tv.setText("edPt num: " + position);
+        tv.setText("edPt num: " + title);
 
         tv = (TextView) findViewById(R.id.info_date);
-        tv.setText("date num: " + position);
+        tv.setText("date num: " + title);
 
         tv = (TextView) findViewById(R.id.info_time);
-        tv.setText("time num: " + position);
+        tv.setText("time num: " + title);
 
     }
 }

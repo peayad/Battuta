@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,9 +26,16 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TAG = "ptr-main";
+    final static private int ADD_TRIP_REQUEST = 0;
+
+    private CashedAdapter myCashedAdapter;
+
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    String[] values;
 
     SharedPreferences loginPreferences;
 
@@ -48,7 +56,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), EditTripActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, ADD_TRIP_REQUEST);
             }
         });
 
@@ -63,13 +71,13 @@ public class MainActivity extends AppCompatActivity
 
 
         // trying CachedAdapter
-        final String[] values = new String[25];
+        values = new String[25];
         for(int i = 0;i<values.length;i++){
             values[i] = "" + i;
         }
 
         ListView myListView;
-        CashedAdapter myCashedAdapter = new CashedAdapter(getApplicationContext(), values);
+        myCashedAdapter = new CashedAdapter(getApplicationContext(), values);
 
         myListView = (ListView) findViewById(R.id.mainListView);
         myListView.setAdapter(myCashedAdapter);
@@ -78,7 +86,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), TripInfoActivity.class);
-                intent.putExtra("id", position);
+                intent.putExtra("title", values[position]);
                 startActivity(intent);
 //                Toast.makeText(getApplicationContext(), "You picked " + values[position], Toast.LENGTH_SHORT).show();
             }
@@ -182,5 +190,17 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ADD_TRIP_REQUEST){
+            if(resultCode == RESULT_OK){
+                values[0] = data.getStringExtra("title");
+                myCashedAdapter.notifyDataSetChanged();
+                Log.i(TAG, values[0]);
+            }
+        }
     }
 }

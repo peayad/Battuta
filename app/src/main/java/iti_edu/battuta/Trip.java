@@ -8,11 +8,11 @@ public class Trip {
     private String endPoint;
     private String date;
     private String time;
-    private boolean isRound;
-    private boolean isDone;
+    private int isRound;
+    private int isDone;
     private String notes;
 
-    public Trip(int id, String title, String startPoint, String endPoint, String date,String time, boolean isRound, boolean isDone, String notes)
+    public Trip(int id, String title, String startPoint, String endPoint, String date,String time, int isRound, int isDone, String notes)
     {
         this.id = id;
         this.title = title;
@@ -74,17 +74,17 @@ public class Trip {
         return time;
     }
 
-    public void setIsround(boolean isRound){
+    public void setIsround(int isRound){
         this.isRound = isRound;
     }
-    public boolean getIsRound(){
+    public int getIsRound(){
         return isRound;
     }
 
-    public void setIsDone(boolean isDone){
+    public void setIsDone(int isDone){
         this.isDone = isDone;
     }
-    public boolean getIsDone(){
+    public int getIsDone(){
         return isDone;
     }
 
