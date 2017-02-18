@@ -42,42 +42,42 @@
                             android:layout_weight="1"
                             android:hint="Title"
                             android:singleLine="true"
-                            android:textColor="@android:color/white"
-                            android:textSize="24sp"
-                            android:editable="false" />
+                            android:textSize="24sp" />
 
                     </android.support.design.widget.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <TextView
+                        android:text="Starting Location"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView3"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp" />
 
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:id="@+id/edit_startPoint"
-                            android:layout_weight="1"
-                            android:hint="Starting Location"
-                            android:singleLine="true"
-                            android:editable="false" />
-
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
+                    <fragment
+                        android:id="@+id/start_place_fragment"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp" />
 
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:id="@+id/edit_endPoint"
-                            android:layout_weight="1"
-                            android:hint="Destination"
-                            android:singleLine="true" />
+                    <TextView
+                        android:text="Destination"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView4"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    <fragment
+                        android:id="@+id/end_place_fragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp" />
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -119,7 +119,9 @@
                         android:layout_weight="1"
                         android:textAppearance="@style/TextAppearance.AppCompat"
                         android:textSize="18sp"
-                        android:layout_marginTop="16dp" />
+                        android:layout_marginTop="16dp"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:layout_marginLeft="5dp" />
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -128,22 +130,22 @@
                         android:layout_weight="1">
 
                         <Button
-                            android:text="Cancel"
+                            android:text="Save Trip"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/button2"
+                            android:id="@+id/edit_btnSaveTrip"
                             android:layout_weight="1"
                             android:layout_marginTop="16dp"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp" />
 
                         <Button
-                            android:id="@+id/edit_btnSave"
+                            android:id="@+id/edit_btnStartTrip"
                             style="?android:textAppearanceSmall"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:text="Save"
+                            android:text="Start Trip"
                             android:textStyle="bold"
                             android:layout_weight="1"
                             android:textColor="@android:color/black"

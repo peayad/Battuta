@@ -200,9 +200,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
-
-            sharedPreferences.edit().putString("email", mEmailView.getText().toString());
-            launchMainActivity();
         }
 
     }
@@ -350,7 +347,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                finish();
+                sharedPreferences.edit().putString("email", mEmailView.getText().toString());
+                launchMainActivity();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

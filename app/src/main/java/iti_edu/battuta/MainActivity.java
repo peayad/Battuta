@@ -3,13 +3,11 @@ package iti_edu.battuta;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
@@ -130,8 +127,13 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_feedback) {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:battuta@iti.com"));
+            intent.putExtra(Intent.EXTRA_EMAIL, "battuta@iti.com");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback");
+            intent.putExtra(Intent.EXTRA_TEXT, "Hello,\n this is my feedback for Battuta App.");
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -154,8 +156,7 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(),"Should Sync with Firebase later :)", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_share) {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_SEND);
+            Intent intent = new Intent(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_TEXT, "Battuta Play Store Link");
             intent.setType("text/plain");
             startActivity(Intent.createChooser(intent, "Share App"));
