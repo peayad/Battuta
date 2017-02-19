@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity
 
     private CashedAdapter myCashedAdapter;
     private BattutaDBhelper myDBhelper;
-    private ArrayList<String> titles = new ArrayList<>();;
+    private ArrayList<String> titles = new ArrayList<>();
+    ;
 
     SharedPreferences loginPreferences;
 
@@ -196,13 +197,15 @@ public class MainActivity extends AppCompatActivity
                 titles = myDBhelper.getAllTrips();
                 myCashedAdapter.add(newTitle);
             }
-        }else if(requestCode == TRIP_INFO_REQUEST){
-            String title = getIntent().getStringExtra("title");
-            myDBhelper.deleteTrip(title);
-            titles.remove(title);
-            titles = myDBhelper.getAllTrips();
-            myCashedAdapter.clear();
-            myCashedAdapter.addAll(titles);
+        } else if (requestCode == TRIP_INFO_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                String title = getIntent().getStringExtra("title");
+                myDBhelper.deleteTrip(title);
+                titles.remove(title);
+                titles = myDBhelper.getAllTrips();
+                myCashedAdapter.clear();
+                myCashedAdapter.addAll(titles);
+            }
         }
     }
 }
