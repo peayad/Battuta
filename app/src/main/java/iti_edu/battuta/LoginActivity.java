@@ -66,8 +66,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
-    private SharedPreferences sharedPreferences;
-
     private static final String EMAIL_PATTERN =
                      "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -76,12 +74,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sharedPreferences = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
 
-        if( sharedPreferences.getBoolean("isLoggedIn", false)){
-            launchMainActivity();
-            finish();
-        }
 
         setContentView(R.layout.activity_login);
         // Set up the login form.
@@ -205,6 +198,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
+            launchMainActivity();
         }
 
     }
@@ -352,8 +346,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                sharedPreferences.edit().putString("email", mEmailView.getText().toString());
-                launchMainActivity();
+                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -368,7 +361,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void launchMainActivity(){
-        sharedPreferences.edit().putBoolean("isLoggedIn", true).apply();
+        SharedPreferences prefs = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
+        prefs.edit().putBoolean("isLoggedIn", true).apply();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

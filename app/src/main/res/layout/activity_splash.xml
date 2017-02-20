@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/actionModeSplitBackground"
+    tools:context="iti_edu.battuta.SplashActivity">
+
+    <Button
+        android:text="@string/touch_anywhere"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/splash_touchEvent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="@android:color/background_light"
+        android:background="@drawable/cast_mini_controller_progress_drawable"
+        android:textSize="12sp"
+        android:textAlignment="center"
+        android:gravity="bottom|center_vertical|center_horizontal"
+        android:paddingBottom="30dp"
+        android:onClick="launchNextActivity"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/splash_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:keepScreenOn="true"
+                android:text="Battuta\nTrip Planner"
+                android:textColor="@color/cast_expanded_controller_text_color"
+                android:textSize="50sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginTop="50dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/bannar"
+                    android:id="@+id/imageView5"
+                    android:layout_weight="1"
+                    android:cropToPadding="false"
+                    android:adjustViewBounds="false" />
+            </LinearLayout>
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/splash_quote"
+                android:layout_marginTop="10dp"
+                android:textColor="@android:color/background_light"
+                android:textAlignment="center"
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
+                android:fontFamily="cursive"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

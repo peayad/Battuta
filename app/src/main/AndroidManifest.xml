@@ -16,13 +16,20 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/app_name">
+            android:name=".SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/app_name">
         </activity>
         <activity
             android:name=".MainActivity"
@@ -33,7 +40,8 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAAkDFUUg1PN_ETN2_TH816Poin7oEhNRM"/>
+            android:value="AIzaSyAAkDFUUg1PN_ETN2_TH816Poin7oEhNRM" />
+
 
     </application>
 
