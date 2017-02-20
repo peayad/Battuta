@@ -63,7 +63,9 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     }
 
     void initEditTexts(){
+        String myTitle = getIntent().getStringExtra("title");
         titleET = (EditText) findViewById(R.id.edit_title);
+        titleET.setText(myTitle);
     }
 
     void initPlaceFragments() {
@@ -160,8 +162,8 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
                     Toast.makeText(getApplicationContext(), "Please, select your destination", Toast.LENGTH_SHORT).show();
                 } else {
                     Uri directionsURI = getDirectionsURI();
-                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW, directionsURI);
-                    startActivity(intent);
+                    Intent goMapsIntent = new Intent(android.content.Intent.ACTION_VIEW, directionsURI);
+                    startActivity(goMapsIntent);
                 }
             }
         });
@@ -190,9 +192,9 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
             the map http link format should be like this:
             http://maps.google.com/maps?saddr= lat,long &daddr= lat,long
         */
-        String startLatLng = startPlace.getLatLng().latitude + "," + startPlace.getLatLng().longitude;
-        String endLatLng = endPlace.getLatLng().latitude + "," + endPlace.getLatLng().longitude;
-        return Uri.parse("http://maps.google.com/maps?saddr=" + startLatLng + "&daddr=" + endLatLng);
+        String startAddress = startPlace.getAddress().toString();
+        String endAddress = endPlace.getAddress().toString();
+        return Uri.parse("http://maps.google.com/maps?saddr=" + startAddress + "&daddr=" + endAddress);
     }
 
 

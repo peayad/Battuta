@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatDialog;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -34,11 +36,12 @@ public class MainActivity extends AppCompatActivity
     private CashedAdapter myCashedAdapter;
     private BattutaDBhelper myDBhelper;
     private ArrayList<String> titles = new ArrayList<>();
-    ;
 
     SharedPreferences loginPreferences;
 
     boolean doubleBackToExitPressedOnce;
+
+    private static String selectedTrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +81,9 @@ public class MainActivity extends AppCompatActivity
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedTrip = titles.get(position);
                 Intent intent = new Intent(getApplicationContext(), TripInfoActivity.class);
-                intent.putExtra("title", titles.get(position));
+                intent.putExtra("title", selectedTrip);
                 startActivityForResult(intent, TRIP_INFO_REQUEST);
             }
         });
@@ -199,12 +203,12 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (requestCode == TRIP_INFO_REQUEST) {
             if (resultCode == RESULT_OK) {
-                String title = getIntent().getStringExtra("title");
-                myDBhelper.deleteTrip(title);
-                titles.remove(title);
+                myDBhelper.deleteTrip(selectedTrip);
+                titles.remove(selectedTrip);
                 titles = myDBhelper.getAllTrips();
                 myCashedAdapter.clear();
                 myCashedAdapter.addAll(titles);
+
             }
         }
     }

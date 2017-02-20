@@ -1,52 +1,72 @@
 package iti_edu.battuta;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class TripInfoActivity extends AppCompatActivity {
 
+    TextView titleTV, startTV, endTV, dateTimeTV;
+    Button startBtn, editBtn, deleteBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trip_info);
+        setContentView(R.layout.info_trip_dialog);
 
-        Intent intent = getIntent();
-        if (intent == null) return;
+        Intent sourceIntent = getIntent();
+        final String title = sourceIntent.getStringExtra("title");
 
-        String title = intent.getStringExtra("title");
-        TextView tv;
+        titleTV = (TextView) findViewById(R.id.info_titleTV);
+        titleTV.setText(title);
 
-        tv = (TextView) findViewById(R.id.info_titleTV);
-        tv.setText(title);
 
-        tv = (TextView) findViewById(R.id.info_startTV);
-        tv.setText("stPt: " + title);
-
-        tv = (TextView) findViewById(R.id.info_endTV);
-        tv.setText("edPt: " + title);
-
-        tv = (TextView) findViewById(R.id.info_dateTimeTV);
-        tv.setText("date/time: " + title);
-
-        Button deleteBtn = (Button) findViewById(R.id.info_deleteTripBtn);
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
+        Button startBtn = (Button) findViewById(R.id.info_startBtn);
+        startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startIntent = getIntent();
-                String title = startIntent.getStringExtra("title");
+                Uri directionsURI = getDirectionsURI();
+                Intent goMapsIntent = new Intent(android.content.Intent.ACTION_VIEW, directionsURI);
+                startActivity(goMapsIntent);
+            }
+        });
 
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("title", title);
-                setResult(Activity.RESULT_OK, returnIntent);
+        Button editBtn = (Button) findViewById(R.id.info_editBtn);
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent editIntent = new Intent(getApplicationContext(), EditTripActivity.class);
+                editIntent.putExtra("title", title);
+                startActivity(editIntent);
                 finish();
             }
         });
 
+
+        Button deleteBtn = (Button) findViewById(R.id.info_deleteBtn);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+
+
+
     }
+
+
+    Uri getDirectionsURI() {
+        /*
+            the map http link format should be like this:
+            http://maps.google.com/maps?saddr= lat,long &daddr= lat,long
+        */
+        return Uri.parse("https://www.google.com/maps/dir/Current+Location/Cairo");
+    }
+
 }

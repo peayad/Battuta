@@ -10,7 +10,9 @@
         <item>Every day is a journey, and the journey itself is home.</item>
         <item>A good traveler has no fixed plans, and is not intent on arriving.</item>
         <item>The journey of a thousand miles begins with a single step.</item>
-        <item>The real voyage of discovery consists not in seeking new landscapes, but in having new eyes.</item>
+        <item>The real voyage of discovery consists not in seeking new landscapes, but in having new
+            eyes.
+        </item>
         <item>I read; I travel; I become</item>
         <item>Travel brings power and love back into your life.</item>
     </array>
@@ -27,9 +29,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
 
 
     <!-- Strings related to Main Activity -->
@@ -54,7 +54,7 @@
     <string name="about_title">About</string>
     <string name="about_contents">This App was developed for the ITI - Android Development Nano program</string>
     <string name="it_was_developed_by">It was developed by:</string>
-    <string name="about_notice">tap outside the dialog\nto dismiss</string>
+    <string name="about_notice">press BACK to dismiss</string>
 
 
     <!-- Strings related to Trip Edit/Info Activity -->
@@ -70,6 +70,9 @@
     <string name="edit_trip">Edit Trip</string>
     <string name="starting_location">Starting Location</string>
     <string name="destination">Destination</string>
+    <string name="info_start">Start</string>
+    <string name="info_edit">Edit</string>
+    <string name="info_delete">Delete</string>
 
 
 </resources>
