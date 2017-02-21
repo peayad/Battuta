@@ -8,14 +8,14 @@ import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
-public class CashedAdapter extends ArrayAdapter<String> {
+public class CashedAdapter extends ArrayAdapter<Trip> {
 
     Context context;
-    ArrayList<String> values;
+    ArrayList<Trip> tripsList;
 
-    public CashedAdapter(Context context, ArrayList<String> values) {
-        super(context, R.layout.list_item, R.id.tvTitle, values);
-        this.values = values;
+    public CashedAdapter(Context context, ArrayList<Trip> tripsList) {
+        super(context, R.layout.list_item, R.id.tvTitle, tripsList);
+        this.tripsList = tripsList;
         this.context = context;
     }
 
@@ -23,7 +23,6 @@ public class CashedAdapter extends ArrayAdapter<String> {
 
         View rowView = convertView;
         ViewCache viewCache;
-        final int positionCopy = position;
 
         if (rowView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -35,11 +34,12 @@ public class CashedAdapter extends ArrayAdapter<String> {
             viewCache = (ViewCache) rowView.getTag();
         }
 
-        viewCache.getTitleTV().setText("Trip num: " + values.get(position));
-        viewCache.getStartTV().setText("stPt num: " + values.get(position));
-        viewCache.getEndTV().setText("edPt num: " + values.get(position));
-        viewCache.getDateTV().setText("date num: " + values.get(position));
-        viewCache.getTimeTV().setText("time num: " + values.get(position));
+        Trip mTrip = tripsList.get(position);
+
+        viewCache.getTitleTV().setText(mTrip.getTitle());
+        viewCache.getStartTV().setText(mTrip.getStartPoint());
+        viewCache.getEndTV().setText(mTrip.getEndPoint());
+        viewCache.getDateTimeTV().setText(mTrip.getDateTime());
 
         return viewCache.getBaseView();
     }

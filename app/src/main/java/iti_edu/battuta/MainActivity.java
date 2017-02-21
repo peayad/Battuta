@@ -35,13 +35,13 @@ public class MainActivity extends AppCompatActivity
 
     private CashedAdapter myCashedAdapter;
     private BattutaDBhelper myDBhelper;
-    private ArrayList<String> titles = new ArrayList<>();
+    private ArrayList<Trip> tripList = new ArrayList<>();
 
     SharedPreferences loginPreferences;
 
     boolean doubleBackToExitPressedOnce;
 
-    private static String selectedTrip;
+    private static Trip selectedTrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         myDBhelper = new BattutaDBhelper(getApplicationContext());
-        titles = myDBhelper.getAllTrips();
-        myCashedAdapter = new CashedAdapter(getApplicationContext(), titles);
+        tripList = myDBhelper.getAllTrips();
+        myCashedAdapter = new CashedAdapter(getApplicationContext(), tripList);
 
         ListView myListView = (ListView) findViewById(R.id.mainListView);
         myListView.setAdapter(myCashedAdapter);
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedTrip = titles.get(position);
+                selectedTrip = tripList.get(position);
                 Intent intent = new Intent(getApplicationContext(), TripInfoActivity.class);
                 intent.putExtra("title", selectedTrip);
                 startActivityForResult(intent, TRIP_INFO_REQUEST);
@@ -196,20 +196,26 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ADD_TRIP_REQUEST) {
             if (resultCode == RESULT_OK) {
-                String newTitle = data.getStringExtra("title");
-                myDBhelper.insertTrip(newTitle);
-                titles = myDBhelper.getAllTrips();
-                myCashedAdapter.add(newTitle);
-            }
-        } else if (requestCode == TRIP_INFO_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                myDBhelper.deleteTrip(selectedTrip);
-                titles.remove(selectedTrip);
-                titles = myDBhelper.getAllTrips();
-                myCashedAdapter.clear();
-                myCashedAdapter.addAll(titles);
+//
+//                Trip newTrip = (Trip) data.getSerializableExtra("trip");
+//                myDBhelper.insertTrip(newTrip);
 
+                tripList = myDBhelper.getAllTrips();
+                myCashedAdapter.clear();
+                myCashedAdapter.addAll(tripList);
+
+                Log.i(TAG, tripList.size() + " list size");
+                Log.i(TAG, myDBhelper.numberOfRows() + " rows");
             }
+//        } else if (requestCode == TRIP_INFO_REQUEST) {
+//            if (resultCode == RESULT_OK) {
+//                myDBhelper.deleteTrip(selectedTrip);
+//                titles.remove(selectedTrip);
+//                titles = myDBhelper.getAllTrips();
+//                myCashedAdapter.clear();
+//                myCashedAdapter.addAll(titles);
+//
+//            }
         }
     }
 }

@@ -1,39 +1,37 @@
 package iti_edu.battuta;
 
-public class Trip {
+import java.io.Serializable;
+
+public class Trip implements Serializable {
 
     private int id;
     private String title;
     private String startPoint;
     private String endPoint;
-    private String date;
-    private String time;
+    private String dateTime;
     private int isRound;
     private int isDone;
     private String notes;
 
-    public Trip(int id, String title, String startPoint, String endPoint, String date,String time, int isRound, int isDone, String notes)
+    public Trip(int id, String title, String startPoint, String endPoint, String dateTime, int isRound, int isDone, String notes)
     {
         this.id = id;
         this.title = title;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
-        this.date = date;
-        this.time = time;
+        this.dateTime = dateTime;
         this.isRound = isRound;
         this.isDone = isDone;
         this.notes = notes;
     }
 
-    public Trip(String title, String startPoint, String endPoint, String date,String time, int isRound, int isDone, String notes)
+    public Trip(String title, String startPoint, String endPoint, String dateTime, int isRound, String notes)
     {
         this.title = title;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
-        this.date = date;
-        this.time = time;
+        this.dateTime = dateTime;
         this.isRound = isRound;
-        this.isDone = isDone;
         this.notes = notes;
     }
 
@@ -65,19 +63,13 @@ public class Trip {
         return endPoint;
     }
 
-    public void setDate(String date){
-        this.date = date;
+    public void setDateTime(String dateTime){
+        this.dateTime = dateTime;
     }
-    public String getDate(){
-        return date;
+    public String getDateTime(){
+        return dateTime;
     }
 
-    public void setTime(String time){
-        this.time = time;
-    }
-    public String getTime(){
-        return time;
-    }
 
     public void setIsround(int isRound){
         this.isRound = isRound;
@@ -99,6 +91,5 @@ public class Trip {
     public String getNotes(){
         return notes;
     }
-
 
 }

@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -37,9 +38,10 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
     private Place startPlace, endPlace;
 
-    private EditText titleET, dateTimeET;
-    private Calendar calendar;
+    private EditText titleET, dateTimeET, notesET;
+    private Switch isRoundSwitch;
 
+    private Calendar calendar;
     private String dateTimeStr;
 
     static final int DATE_DIALOG_ID = 0;
@@ -68,6 +70,8 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
     void initEditTexts() {
         titleET = (EditText) findViewById(R.id.edit_title);
+        notesET = (EditText) findViewById(R.id.edit_notes);
+        isRoundSwitch = (Switch) findViewById(R.id.switch_isRound);
     }
 
     void initPlaceFragments() {
@@ -157,10 +161,9 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
             @Override
             public void onClick(View v) {
                 if(titleET.getText().toString() != null) {
-                    String extraString = titleET.getText().toString();
+
+                    addTripData();
                     Intent returnIntent = new Intent();
-                    returnIntent.putExtra("title", extraString);
-                    Log.i(TAG, extraString);
                     setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }else{
@@ -205,5 +208,21 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
                 showDialog(DATE_DIALOG_ID);
             }
         });
+    }
+
+    private Trip getTripData(){
+        String tTitle =  titleET.getText().toString() + "";
+        String tStart = startPlace != null ? startPlace.getAddress().toString() + "": "";
+        String tEnd = endPlace != null ? endPlace.getAddress().toString() + "": "";
+        String tDateTime = dateTimeStr + "";
+        int tIsRound = isRoundSwitch.isChecked() ? 1 : 0;
+        String tNotes = notesET.getText().toString() + "";
+
+        return new Trip(tTitle,tStart,tEnd,tDateTime,tIsRound,tNotes);
+    }
+
+    private void addTripData(){
+        BattutaDBhelper mDBhelper = new BattutaDBhelper(getApplicationContext());
+        mDBhelper.insertTrip(getTripData());
     }
 }
