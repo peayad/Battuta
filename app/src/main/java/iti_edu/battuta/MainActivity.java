@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatDialog;
 import android.util.Log;
 import android.view.View;
@@ -117,19 +118,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_feedback) {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:battuta@iti.com"));
@@ -195,16 +192,11 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ADD_TRIP_REQUEST) {
             if (resultCode == RESULT_OK) {
-//
-//                Trip newTrip = (Trip) data.getSerializableExtra("trip");
-//                myDBhelper.insertTrip(newTrip);
-
                 tripList = myDBhelper.getAllTrips();
                 myCashedAdapter.clear();
                 myCashedAdapter.addAll(tripList);
 
-                Log.i(TAG, tripList.size() + " list size");
-                Log.i(TAG, myDBhelper.numberOfRows() + " rows");
+                Snackbar.make(findViewById(R.id.content_main), R.string.snackbar_trip_added, Snackbar.LENGTH_SHORT).show();
             }
 //        } else if (requestCode == TRIP_INFO_REQUEST) {
 //            if (resultCode == RESULT_OK) {
@@ -213,7 +205,7 @@ public class MainActivity extends AppCompatActivity
 //                titles = myDBhelper.getAllTrips();
 //                myCashedAdapter.clear();
 //                myCashedAdapter.addAll(titles);
-//
+//                Snackbar.make(findViewById(R.id.content_main), R.string.snackbar_trip_deleted, Snackbar.LENGTH_SHORT).show();
 //            }
         }
     }

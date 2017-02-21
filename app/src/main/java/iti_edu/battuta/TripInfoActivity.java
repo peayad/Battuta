@@ -8,10 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.Serializable;
+
 public class TripInfoActivity extends AppCompatActivity {
 
     TextView titleTV, startTV, endTV, dateTimeTV;
     Button startBtn, editBtn, deleteBtn;
+
+    final private int TRIP_EDIT_REQUEST = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +42,9 @@ public class TripInfoActivity extends AppCompatActivity {
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Uri directionsURI = getDirectionsURI();
-//                Intent goMapsIntent = new Intent(android.content.Intent.ACTION_VIEW, directionsURI);
-//                startActivity(goMapsIntent);
+                Uri directionsURI = getDirectionsURI();
+                Intent goMapsIntent = new Intent(android.content.Intent.ACTION_VIEW, directionsURI);
+                startActivity(goMapsIntent);
             }
         });
 
@@ -48,10 +52,10 @@ public class TripInfoActivity extends AppCompatActivity {
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent editIntent = new Intent(getApplicationContext(), EditTripActivity.class);
-//                editIntent.putExtra("title", title);
-//                startActivity(editIntent);
-//                finish();
+                Intent intent = new Intent(getApplicationContext(), EditTripActivity.class);
+                intent.putExtra("trip", (Serializable) trip);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -66,7 +70,6 @@ public class TripInfoActivity extends AppCompatActivity {
         });
 
 
-
     }
 
 
@@ -75,7 +78,7 @@ public class TripInfoActivity extends AppCompatActivity {
             the map http link format should be like this:
             http://maps.google.com/maps?saddr= lat,long &daddr= lat,long
         */
-        return Uri.parse("https://www.google.com/maps/dir/Current+Location/Cairo");
+        return Uri.parse("https://www.google.com/maps?saddr=Current+Location&daddr=Cairo");
     }
 
 }

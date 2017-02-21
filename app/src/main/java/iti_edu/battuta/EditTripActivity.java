@@ -66,12 +66,15 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         initPlaceFragments();
         initDateTime();
         initButtons();
+        showIfHasTrip();
     }
 
     void initEditTexts() {
         titleET = (EditText) findViewById(R.id.edit_title);
         notesET = (EditText) findViewById(R.id.edit_notes);
         isRoundSwitch = (Switch) findViewById(R.id.switch_isRound);
+
+
     }
 
     void initPlaceFragments() {
@@ -161,7 +164,6 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
             @Override
             public void onClick(View v) {
                 if(titleET.getText().toString() != null) {
-
                     addTripData();
                     Intent returnIntent = new Intent();
                     setResult(Activity.RESULT_OK, returnIntent);
@@ -224,5 +226,16 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     private void addTripData(){
         BattutaDBadapter mDBhelper = new BattutaDBadapter(getApplicationContext());
         mDBhelper.insertTrip(getTripData());
+    }
+
+    void showIfHasTrip(){
+        Intent sourceIntent = getIntent();
+        Trip editedTrip = (Trip) sourceIntent.getSerializableExtra("trip");
+        if(editedTrip != null){
+            titleET.setText(editedTrip.getTitle());
+            dateTimeET.setText(editedTrip.getDateTime());
+            isRoundSwitch.setChecked(editedTrip.getIsRound() == 1);
+            notesET.setText(editedTrip.getNotes());
+        }
     }
 }
