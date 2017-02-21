@@ -198,15 +198,15 @@ public class MainActivity extends AppCompatActivity
 
                 Snackbar.make(findViewById(R.id.content_main), R.string.snackbar_trip_added, Snackbar.LENGTH_SHORT).show();
             }
-//        } else if (requestCode == TRIP_INFO_REQUEST) {
-//            if (resultCode == RESULT_OK) {
+        } else if (requestCode == TRIP_INFO_REQUEST) {
+            if (resultCode == RESULT_OK) {
 //                myDBhelper.deleteTrip(selectedTrip);
 //                titles.remove(selectedTrip);
 //                titles = myDBhelper.getAllTrips();
 //                myCashedAdapter.clear();
 //                myCashedAdapter.addAll(titles);
-//                Snackbar.make(findViewById(R.id.content_main), R.string.snackbar_trip_deleted, Snackbar.LENGTH_SHORT).show();
-//            }
+                Snackbar.make(findViewById(R.id.content_main), R.string.snackbar_trip_deleted, Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 }
