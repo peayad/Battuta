@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedTrip = tripList.get(position);
                 Intent intent = new Intent(getApplicationContext(), TripInfoActivity.class);
-                intent.putExtra("title", selectedTrip);
+                intent.putExtra("trip", (Serializable) selectedTrip);
                 startActivityForResult(intent, TRIP_INFO_REQUEST);
             }
         });

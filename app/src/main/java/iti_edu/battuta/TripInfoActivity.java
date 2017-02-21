@@ -19,19 +19,28 @@ public class TripInfoActivity extends AppCompatActivity {
         setContentView(R.layout.info_trip_dialog);
 
         Intent sourceIntent = getIntent();
-        final String title = sourceIntent.getStringExtra("title");
+        final Trip trip = (Trip) sourceIntent.getSerializableExtra("trip");
 
         titleTV = (TextView) findViewById(R.id.info_titleTV);
-        titleTV.setText(title);
+        titleTV.setText(trip.getTitle());
+
+        startTV = (TextView) findViewById(R.id.info_startAddressTV);
+        startTV.setText(trip.getStartPoint());
+
+        endTV = (TextView) findViewById(R.id.info_destinationTV);
+        endTV.setText(trip.getEndPoint());
+
+        dateTimeTV = (TextView) findViewById(R.id.info_dateTimeTV);
+        dateTimeTV.setText(trip.getDateTime());
 
 
         Button startBtn = (Button) findViewById(R.id.info_startBtn);
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri directionsURI = getDirectionsURI();
-                Intent goMapsIntent = new Intent(android.content.Intent.ACTION_VIEW, directionsURI);
-                startActivity(goMapsIntent);
+//                Uri directionsURI = getDirectionsURI();
+//                Intent goMapsIntent = new Intent(android.content.Intent.ACTION_VIEW, directionsURI);
+//                startActivity(goMapsIntent);
             }
         });
 
@@ -39,10 +48,10 @@ public class TripInfoActivity extends AppCompatActivity {
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent editIntent = new Intent(getApplicationContext(), EditTripActivity.class);
-                editIntent.putExtra("title", title);
-                startActivity(editIntent);
-                finish();
+//                Intent editIntent = new Intent(getApplicationContext(), EditTripActivity.class);
+//                editIntent.putExtra("title", title);
+//                startActivity(editIntent);
+//                finish();
             }
         });
 
@@ -51,8 +60,8 @@ public class TripInfoActivity extends AppCompatActivity {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(RESULT_OK);
-                finish();
+//                setResult(RESULT_OK);
+//                finish();
             }
         });
 

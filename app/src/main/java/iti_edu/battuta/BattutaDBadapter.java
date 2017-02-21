@@ -92,7 +92,7 @@ public class BattutaDBadapter {
             int now_later = cur.getInt(index7);
             String notes = cur.getString(index8);
 
-            Trip trip = new Trip(id, title, dateTime, start_loc, end_loc, one_round, now_later, notes);
+            Trip trip = new Trip(id, title, start_loc, end_loc, dateTime, one_round, now_later, notes);
 
             array_list.add(trip);
         }
