@@ -2,9 +2,9 @@ package iti_edu.battuta;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Build;
@@ -28,9 +28,6 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 
-import java.util.Date;
-
-
 public class EditTripActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "ptr-editTrip";
@@ -39,11 +36,18 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     private GoogleApiClient mGoogleApiClient;
 
     private Place startPlace, endPlace;
-    private EditText dateTimeET;
-    private EditText titleET;
 
+    private EditText titleET, dateTimeET;
+    private Calendar calendar;
+
+    private String dateTimeStr;
+
+    static final int DATE_DIALOG_ID = 0;
+    static final int TIME_DIALOG_ID = 1;
     private int tripYear, tripMonth, tripDay, tripHour, tripMinute;
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,14 +62,12 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
         initEditTexts();
         initPlaceFragments();
-        initDateTimeET();
+        initDateTime();
         initButtons();
     }
 
-    void initEditTexts(){
-        String myTitle = getIntent().getStringExtra("title");
+    void initEditTexts() {
         titleET = (EditText) findViewById(R.id.edit_title);
-        titleET.setText(myTitle);
     }
 
     void initPlaceFragments() {
@@ -102,54 +104,36 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         }
     }
 
-
-    void initDateTimeET() {
-        dateTimeET = (EditText) findViewById(R.id.edit_date_time);
-        dateTimeET.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v) {
-                startDateDialog();
-            }
-        });
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        // TODO Auto-generated method stub
+        switch (id) {
+            case DATE_DIALOG_ID:
+                return new DatePickerDialog(this, myDateListener, tripYear, tripMonth, tripDay);
+            case TIME_DIALOG_ID:
+                return new TimePickerDialog(this, timeDate, tripHour, tripMinute, false);
+        }
+        return null;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    void startTimeDialog() {
-        TimePickerDialog timePicker = new TimePickerDialog(EditTripActivity.this, new TimePickerDialog.OnTimeSetListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                tripHour = selectedHour;
-                tripMinute = selectedMinute;
 
-                Date selectedDate = new Date(tripYear, tripMonth, tripDay, tripHour, tripMinute);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YY hh:mm a");
-                String dateString = dateFormat.format(selectedDate);
+    private DatePickerDialog.OnDateSetListener myDateListener = new
+            DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker arg0, int year, int month, int day) {
+                    dateTimeStr = day + "/" + month + "/" + year;
+                    showDialog(TIME_DIALOG_ID);
+                }
+            };
 
-                dateTimeET.setText(dateString);
+    private TimePickerDialog.OnTimeSetListener timeDate = new TimePickerDialog.OnTimeSetListener() {
 
-                Log.i(TAG, dateString);
-            }
-        }, Calendar.HOUR, Calendar.MINUTE, false);
-        timePicker.setTitle("Select Time");
-        timePicker.show();
-    }
+        public void onTimeSet(TimePicker view, int hours, int minutes) {
+            dateTimeStr = dateTimeStr + "   " + hours + ":" + minutes;
+            dateTimeET.setText(dateTimeStr);
+        }
+    };
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    void startDateDialog() {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(EditTripActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
-                tripYear = selectedYear;
-                tripMonth = selectedMonth;
-                tripDay = selectedDay;
-                startTimeDialog();
-            }
-        }, 2017, Calendar.MONTH, Calendar.DAY_OF_MONTH);
-        datePickerDialog.setTitle("Select Date");
-        datePickerDialog.show();
-    }
 
     void initButtons() {
         Button startTripBtn = (Button) findViewById(R.id.edit_btnStartTrip);
@@ -162,8 +146,8 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
                     Toast.makeText(getApplicationContext(), "Please, select your destination", Toast.LENGTH_SHORT).show();
                 } else {
                     Uri directionsURI = getDirectionsURI();
-                    Intent goMapsIntent = new Intent(android.content.Intent.ACTION_VIEW, directionsURI);
-                    startActivity(goMapsIntent);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, directionsURI);
+                    startActivity(intent);
                 }
             }
         });
@@ -192,9 +176,9 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
             the map http link format should be like this:
             http://maps.google.com/maps?saddr= lat,long &daddr= lat,long
         */
-        String startAddress = startPlace.getAddress().toString();
-        String endAddress = endPlace.getAddress().toString();
-        return Uri.parse("http://maps.google.com/maps?saddr=" + startAddress + "&daddr=" + endAddress);
+        String startLatLng = startPlace.getLatLng().latitude + "," + startPlace.getLatLng().longitude;
+        String endLatLng = endPlace.getLatLng().latitude + "," + endPlace.getLatLng().longitude;
+        return Uri.parse("http://maps.google.com/maps?saddr=" + startLatLng + "&daddr=" + endLatLng);
     }
 
 
@@ -203,4 +187,23 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         Toast.makeText(getApplicationContext(), "Cannot connect to Google Places!", Toast.LENGTH_SHORT).show();
     }
 
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void initDateTime(){
+        dateTimeET = (EditText) findViewById(R.id.edit_date_time);
+        calendar = Calendar.getInstance();
+        tripYear = calendar.get(Calendar.YEAR);
+        tripMonth = calendar.get(Calendar.MONTH);
+        tripDay = calendar.get(Calendar.DAY_OF_MONTH);
+        tripHour = calendar.get(Calendar.HOUR_OF_DAY);
+        tripMinute = calendar.get(Calendar.MINUTE);
+
+        dateTimeET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(DATE_DIALOG_ID);
+            }
+        });
+    }
 }
