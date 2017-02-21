@@ -222,7 +222,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     }
 
     private void addTripData(){
-        BattutaDBhelper mDBhelper = new BattutaDBhelper(getApplicationContext());
+        BattutaDBadapter mDBhelper = new BattutaDBadapter(getApplicationContext());
         mDBhelper.insertTrip(getTripData());
     }
 }

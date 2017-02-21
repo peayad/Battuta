@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatDialog;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity
     final static private int TRIP_INFO_REQUEST = 1;
 
     private CashedAdapter myCashedAdapter;
-    private BattutaDBhelper myDBhelper;
+    private BattutaDBadapter myDBhelper;
     private ArrayList<Trip> tripList = new ArrayList<>();
 
     SharedPreferences loginPreferences;
@@ -71,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        myDBhelper = new BattutaDBhelper(getApplicationContext());
+        myDBhelper = new BattutaDBadapter(getApplicationContext());
         tripList = myDBhelper.getAllTrips();
         myCashedAdapter = new CashedAdapter(getApplicationContext(), tripList);
 
