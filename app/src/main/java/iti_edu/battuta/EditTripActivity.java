@@ -48,6 +48,8 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     static final int TIME_DIALOG_ID = 1;
     private int tripYear, tripMonth, tripDay, tripHour, tripMinute;
 
+    private boolean isEditingTrip;
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -66,7 +68,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         initPlaceFragments();
         initDateTime();
         initButtons();
-        showIfHasTrip();
+        checkIfEditingTrip();
     }
 
     void initEditTexts() {
@@ -164,10 +166,15 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
             @Override
             public void onClick(View v) {
                 if(titleET.getText().toString() != null) {
-                    addTripData();
-                    Intent returnIntent = new Intent();
-                    setResult(Activity.RESULT_OK, returnIntent);
+                    if(isEditingTrip){
+                        editTripData();
+                    }else{
+                        addTripData();
+                        Intent returnIntent = new Intent();
+                        setResult(Activity.RESULT_OK, returnIntent);
+                    }
                     finish();
+
                 }else{
                     Toast.makeText(getApplicationContext(),"Please, enter trip title", Toast.LENGTH_SHORT);
                 }
@@ -228,7 +235,11 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         mDBhelper.insertTrip(getTripData());
     }
 
-    void showIfHasTrip(){
+    private void editTripData(){
+        //TODO Tasnim
+    }
+
+    private void checkIfEditingTrip(){
         Intent sourceIntent = getIntent();
         Trip editedTrip = (Trip) sourceIntent.getSerializableExtra("trip");
         if(editedTrip != null){
@@ -236,6 +247,8 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
             dateTimeET.setText(editedTrip.getDateTime());
             isRoundSwitch.setChecked(editedTrip.getIsRound() == 1);
             notesET.setText(editedTrip.getNotes());
+            isEditingTrip = true;
         }
+        isEditingTrip =  false;
     }
 }

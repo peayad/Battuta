@@ -200,6 +200,8 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (requestCode == TRIP_INFO_REQUEST) {
             if (resultCode == RESULT_OK) {
+
+                // TODO tasnim delete
 //                myDBhelper.deleteTrip(selectedTrip);
 //                titles.remove(selectedTrip);
 //                titles = myDBhelper.getAllTrips();
