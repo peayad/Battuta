@@ -1,15 +1,14 @@
 package iti_edu.battuta;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.icu.util.Calendar;
+import java.util.Calendar;
 import android.net.Uri;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,7 +50,6 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     private boolean isEditingTrip;
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,7 +113,6 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
     @Override
     protected Dialog onCreateDialog(int id) {
-        // TODO Auto-generated method stub
         switch (id) {
             case DATE_DIALOG_ID:
                 return new DatePickerDialog(this, myDateListener, tripYear, tripMonth, tripDay);
@@ -138,7 +135,22 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     private TimePickerDialog.OnTimeSetListener timeDate = new TimePickerDialog.OnTimeSetListener() {
 
         public void onTimeSet(TimePicker view, int hours, int minutes) {
-            dateTimeStr = dateTimeStr + "   " + hours + ":" + minutes;
+
+            String timeStr = "";
+
+            if (hours > 12) {
+                timeStr = String.valueOf(hours - 12) + ":" + (String.valueOf(minutes) + "pm");
+            } else if (hours == 12) {
+                timeStr = "12" + ":" + (String.valueOf(minutes) + "pm");
+            } else if (hours < 12) {
+                if (hours != 0) {
+                    timeStr = String.valueOf(hours) + ":" + (String.valueOf(minutes) + "am");
+                } else {
+                    timeStr = "12" + ":" + (String.valueOf(minutes) + "am");
+                }
+            }
+
+            dateTimeStr += "  " + timeStr;
             dateTimeET.setText(dateTimeStr);
         }
     };
@@ -201,7 +213,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @SuppressLint("NewApi")
     private void initDateTime(){
         dateTimeET = (EditText) findViewById(R.id.edit_date_time);
         calendar = Calendar.getInstance();

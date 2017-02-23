@@ -17,10 +17,6 @@ public class BattutaDBadapter {
 
     BattutaDBadapter(Context context){
         helper = new BattutaDBhelper(context);
-
-
-//        insertTrip(new Trip("hi",   "kk", "kk","ooo", 0,"lll"));
-//        insertTrip(new Trip("hello","fff", "xxx","sss", 0,"fff"));
     }
 
     public boolean insertTrip(Trip trip) {
@@ -52,27 +48,28 @@ public class BattutaDBadapter {
         return db.delete(helper.TABLE_NAME, helper.ID + " = ? ", new String[]{Integer.toString(id)});
     }
 
-   /* public void deleteTrip(String title) {
-        SQLiteDatabase db = getWritableDatabase();
-//        String selection = TITLE + " = ?";
-//        String[] selectionArgs = {title};
-//        db.delete(TABLE_NAME, selection, selectionArgs);
-        ArrayList<String> myArray = getAllTrips();
-
-        deleteTable();
-        for (int i = 0;i<myArray.size();i++){
-            if (myArray.get(i) == title) continue;
-            insertTrip(myArray.get(i));
-        }
+   public void deleteTrip(String title) {
+//        SQLiteDatabase db = helper.getWritableDatabase();
+////        String selection = TITLE + " = ?";
+////        String[] selectionArgs = {title};
+////        db.delete(TABLE_NAME, selection, selectionArgs);
+//       db.execSQL("DELETE FROM TABLE " + helper.TABLE_NAME + " WHERE " + helper.ID + " = ?", )
+//        ArrayList<String> myArray = getAllTrips();
+//
+//        deleteTable();
+//        for (int i = 0;i<myArray.size();i++){
+//            if (myArray.get(i) == title) continue;
+//            insertTrip(myArray.get(i));
+//        }
     }
-    */
+
 
     public ArrayList<Trip> getAllTrips() {
         ArrayList<Trip> array_list = new ArrayList<>();
         SQLiteDatabase db = helper.getReadableDatabase();
 
-        Cursor cur = db.rawQuery("select * from " + helper.TABLE_NAME, null);
-        //cur.moveToPosition(0);
+        Cursor cur = db.rawQuery("SELECT * FROM " + helper.TABLE_NAME, null);
+//        cur.moveToPosition(0);
         while (cur.moveToNext()) {
             int index0 = cur.getColumnIndex(helper.ID);
             int index1 = cur.getColumnIndex(helper.TITLE);

@@ -1,7 +1,9 @@
 package iti_edu.battuta;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -64,8 +66,25 @@ public class TripInfoActivity extends AppCompatActivity {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(RESULT_OK);
-                finish();
+                AlertDialog.Builder a_builder = new AlertDialog.Builder(TripInfoActivity.this);
+                a_builder.setMessage("Do you want to Delete this Trip !!!")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                setResult(RESULT_OK);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        }) ;
+                AlertDialog alert = a_builder.create();
+                alert.setTitle("Alert !!!");
+                alert.show();
             }
         });
 
