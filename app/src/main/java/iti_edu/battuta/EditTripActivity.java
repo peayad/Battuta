@@ -6,7 +6,14 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -73,8 +80,6 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         titleET = (EditText) findViewById(R.id.edit_title);
         notesET = (EditText) findViewById(R.id.edit_notes);
         isRoundSwitch = (Switch) findViewById(R.id.switch_isRound);
-
-
     }
 
     void initPlaceFragments() {
@@ -136,21 +141,33 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
         public void onTimeSet(TimePicker view, int hours, int minutes) {
 
+
             String timeStr = "";
+            String aa = "";
 
             if (hours > 12) {
-                timeStr = String.valueOf(hours - 12) + ":" + (String.valueOf(minutes) + "pm");
+                timeStr = String.valueOf(hours - 12) + ":" + String.valueOf(minutes);
+                aa = "pm";
             } else if (hours == 12) {
-                timeStr = "12" + ":" + (String.valueOf(minutes) + "pm");
+                timeStr = "12" + ":" + String.valueOf(minutes);
+                aa = "pm";
             } else if (hours < 12) {
                 if (hours != 0) {
-                    timeStr = String.valueOf(hours) + ":" + (String.valueOf(minutes) + "am");
+                    timeStr = String.valueOf(hours) + ":" + String.valueOf(minutes);
                 } else {
-                    timeStr = "12" + ":" + (String.valueOf(minutes) + "am");
+                    timeStr = "12" + ":" + String.valueOf(minutes);
                 }
+                aa = "am";
             }
 
-            dateTimeStr += "  " + timeStr;
+            DateFormat sdf = new SimpleDateFormat("hh:mm");
+            try {
+                Date date = sdf.parse(timeStr);
+                dateTimeStr += "  " + sdf.format(date) + " " + aa;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             dateTimeET.setText(dateTimeStr);
         }
     };
@@ -177,18 +194,18 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         saveTripBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(titleET.getText().toString() != null) {
-                    if(isEditingTrip){
+                if (titleET.getText().toString() != null) {
+                    if (isEditingTrip) {
                         editTripData();
-                    }else{
+                    } else {
                         addTripData();
                         Intent returnIntent = new Intent();
                         setResult(Activity.RESULT_OK, returnIntent);
                     }
                     finish();
 
-                }else{
-                    Toast.makeText(getApplicationContext(),"Please, enter trip title", Toast.LENGTH_SHORT);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please, enter trip title", Toast.LENGTH_SHORT);
                 }
             }
         });
@@ -212,9 +229,8 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     }
 
 
-
     @SuppressLint("NewApi")
-    private void initDateTime(){
+    private void initDateTime() {
         dateTimeET = (EditText) findViewById(R.id.edit_date_time);
         calendar = Calendar.getInstance();
         tripYear = calendar.get(Calendar.YEAR);
@@ -231,36 +247,36 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         });
     }
 
-    private Trip getTripData(){
-        String tTitle =  titleET.getText().toString() + "";
-        String tStart = startPlace != null ? startPlace.getAddress().toString() + "": "";
-        String tEnd = endPlace != null ? endPlace.getAddress().toString() + "": "";
+    private Trip getTripData() {
+        String tTitle = titleET.getText().toString() + "";
+        String tStart = startPlace != null ? startPlace.getAddress().toString() + "" : "";
+        String tEnd = endPlace != null ? endPlace.getAddress().toString() + "" : "";
         String tDateTime = dateTimeStr + "";
         int tIsRound = isRoundSwitch.isChecked() ? 1 : 0;
         String tNotes = notesET.getText().toString() + "";
 
-        return new Trip(tTitle,tStart,tEnd,tDateTime,tIsRound,tNotes);
+        return new Trip(tTitle, tStart, tEnd, tDateTime, tIsRound, tNotes);
     }
 
-    private void addTripData(){
+    private void addTripData() {
         BattutaDBadapter mDBhelper = new BattutaDBadapter(getApplicationContext());
         mDBhelper.insertTrip(getTripData());
     }
 
-    private void editTripData(){
+    private void editTripData() {
         //TODO Tasnim
     }
 
-    private void checkIfEditingTrip(){
+    private void checkIfEditingTrip() {
         Intent sourceIntent = getIntent();
         Trip editedTrip = (Trip) sourceIntent.getSerializableExtra("trip");
-        if(editedTrip != null){
+        if (editedTrip != null) {
             titleET.setText(editedTrip.getTitle());
             dateTimeET.setText(editedTrip.getDateTime());
             isRoundSwitch.setChecked(editedTrip.getIsRound() == 1);
             notesET.setText(editedTrip.getNotes());
             isEditingTrip = true;
         }
-        isEditingTrip =  false;
+        isEditingTrip = false;
     }
 }

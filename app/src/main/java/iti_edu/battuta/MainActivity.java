@@ -200,13 +200,10 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (requestCode == TRIP_INFO_REQUEST) {
             if (resultCode == RESULT_OK) {
-
-                // TODO tasnim delete
-//                myDBhelper.deleteTrip(selectedTrip);
-//                titles.remove(selectedTrip);
-//                titles = myDBhelper.getAllTrips();
-//                myCashedAdapter.clear();
-//                myCashedAdapter.addAll(titles);
+                myDBhelper.deleteTrip(selectedTrip);
+                tripList = myDBhelper.getAllTrips();
+                myCashedAdapter.clear();
+                myCashedAdapter.addAll(tripList);
                 Snackbar.make(findViewById(R.id.content_main), R.string.snackbar_trip_deleted, Snackbar.LENGTH_SHORT).show();
             }
         }

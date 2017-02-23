@@ -48,19 +48,10 @@ public class BattutaDBadapter {
         return db.delete(helper.TABLE_NAME, helper.ID + " = ? ", new String[]{Integer.toString(id)});
     }
 
-   public void deleteTrip(String title) {
-//        SQLiteDatabase db = helper.getWritableDatabase();
-////        String selection = TITLE + " = ?";
-////        String[] selectionArgs = {title};
-////        db.delete(TABLE_NAME, selection, selectionArgs);
-//       db.execSQL("DELETE FROM TABLE " + helper.TABLE_NAME + " WHERE " + helper.ID + " = ?", )
-//        ArrayList<String> myArray = getAllTrips();
-//
-//        deleteTable();
-//        for (int i = 0;i<myArray.size();i++){
-//            if (myArray.get(i) == title) continue;
-//            insertTrip(myArray.get(i));
-//        }
+    public void deleteTrip(Trip trip) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String[] selectionArgs = {Integer.toString(trip.getId())};
+        db.delete(helper.TABLE_NAME, helper.ID + " = ?", selectionArgs);
     }
 
 
