@@ -133,7 +133,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     private DatePickerDialog.OnDateSetListener myDateListener = new
             DatePickerDialog.OnDateSetListener() {
                 @Override
-                public void onDateSet(DatePicker arg0, int year, int month, int day) {
+                public void onDateSet(DatePicker view, int year, int month, int day) {
                     dateTimeStr = day + "/" + month + "/" + year;
                     showDialog(TIME_DIALOG_ID);
                 }
@@ -141,28 +141,12 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
     private TimePickerDialog.OnTimeSetListener timeDate = new TimePickerDialog.OnTimeSetListener() {
 
-        public void onTimeSet(TimePicker view, int hours, int minutes) {
+        public void onTimeSet(TimePicker view, int hourOfDay, int minutes) {
 
-
-            String timeStr = "";
-
-
-            if (hours > 12) {
-                timeStr = String.valueOf(hours - 12) + ":" + String.valueOf(minutes);
-                aa = "pm";
-            } else if (hours == 12) {
-                timeStr = "12" + ":" + String.valueOf(minutes);
-                aa = "pm";
-            } else if (hours < 12) {
-                if (hours != 0) {
-                    timeStr = String.valueOf(hours) + ":" + String.valueOf(minutes);
-                } else {
-                    timeStr = "12" + ":" + String.valueOf(minutes);
-                }
-                aa = "am";
-            }
-
+            aa = hourOfDay > 11 ? "pm" : "am";
+            String timeStr = String.valueOf(hourOfDay) + ":" + String.valueOf(minutes);
             DateFormat sdf = new SimpleDateFormat("hh:mm");
+
             try {
                 Date date = sdf.parse(timeStr);
                 dateTimeStr += "  " + sdf.format(date) + " " + aa;
@@ -240,7 +224,6 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
         calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-
         tripYear = calendar.get(Calendar.YEAR);
         tripMonth = calendar.get(Calendar.MONTH);
         tripDay = calendar.get(Calendar.DAY_OF_MONTH);
@@ -288,34 +271,43 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         return false;
     }
 
-    private boolean hasNotEnteredAllDetails(){
+    private boolean hasNotEnteredAllDetails() {
         Log.i(TAG, "i am here now");
         return titleET.getText().toString().equals("") ||
                 dateTimeET.getText().toString().equals("");
 
     }
 
-    private void createReminder(){
+    private void createReminder() {
 
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
 
         Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy  hh:mm aa");
 
-        int tripNewHour = aa.equals("am") ? tripHour : tripHour + 12;
+        try {
+            c.setTime(sdf.parse(dateTimeStr));
+            c.add(Calendar.MONTH, 1);
+            Log.i(TAG, "worked well!");
+            Log.i(TAG, System.currentTimeMillis() + "system time");
+            Log.i(TAG, c.getTimeInMillis() + "calendar time");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.i(TAG, "didn't happen");
+        }
 
-        c.set(Calendar.YEAR, tripYear);
-        c.set(Calendar.MONTH, tripMonth);
-        c.set(Calendar.DAY_OF_MONTH, tripDay);
-        c.set(Calendar.HOUR, tripNewHour);
-        c.set(Calendar.MINUTE, tripMinute);
 
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//        manager.set(AlarmManager.RTC, c.getTimeInMillis(), pendingIntent);
-        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 10000, pendingIntent);
+        manager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+//        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 10000, pendingIntent);
 
-        Log.i(TAG, "i got here!");
+        SimpleDateFormat formatter = new SimpleDateFormat("DD-MMM-yyyy hh:mm aa");
+        String currentDate = formatter.format(c.getTimeInMillis());
+        Log.i(TAG, currentDate + " that's the current date");
+
+        Log.i(TAG, c.get(c.HOUR) + " look");
+        Log.i(TAG, c.get(c.MINUTE) + " look");
 
     }
 }
