@@ -2,9 +2,12 @@ package iti_edu.battuta;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 
 import java.sql.Time;
@@ -54,7 +57,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     static final int TIME_DIALOG_ID = 1;
     private int tripYear, tripMonth, tripDay, tripHour, tripMinute;
 
-    private boolean isEditingTrip;
+    String aa = "";
 
 
     @Override
@@ -73,7 +76,6 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         initPlaceFragments();
         initDateTime();
         initButtons();
-        checkIfEditingTrip();
     }
 
     void initEditTexts() {
@@ -143,7 +145,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
 
             String timeStr = "";
-            String aa = "";
+
 
             if (hours > 12) {
                 timeStr = String.valueOf(hours - 12) + ":" + String.valueOf(minutes);
@@ -194,18 +196,20 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         saveTripBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (titleET.getText().toString() != null) {
-                    if (isEditingTrip) {
+                if (!hasNotEnteredAllDetails()) {
+                    if (isEditingTrip()) {
                         editTripData();
                     } else {
                         addTripData();
                         Intent returnIntent = new Intent();
                         setResult(Activity.RESULT_OK, returnIntent);
                     }
+
+                    createReminder();
                     finish();
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "Please, enter trip title", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Some fields are required!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -231,8 +235,12 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
     @SuppressLint("NewApi")
     private void initDateTime() {
+
         dateTimeET = (EditText) findViewById(R.id.edit_date_time);
+
         calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+
         tripYear = calendar.get(Calendar.YEAR);
         tripMonth = calendar.get(Calendar.MONTH);
         tripDay = calendar.get(Calendar.DAY_OF_MONTH);
@@ -267,7 +275,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         //TODO Tasnim
     }
 
-    private void checkIfEditingTrip() {
+    private boolean isEditingTrip() {
         Intent sourceIntent = getIntent();
         Trip editedTrip = (Trip) sourceIntent.getSerializableExtra("trip");
         if (editedTrip != null) {
@@ -275,8 +283,39 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
             dateTimeET.setText(editedTrip.getDateTime());
             isRoundSwitch.setChecked(editedTrip.getIsRound() == 1);
             notesET.setText(editedTrip.getNotes());
-            isEditingTrip = true;
+            return true;
         }
-        isEditingTrip = false;
+        return false;
+    }
+
+    private boolean hasNotEnteredAllDetails(){
+        Log.i(TAG, "i am here now");
+        return titleET.getText().toString().equals("") ||
+                dateTimeET.getText().toString().equals("");
+
+    }
+
+    private void createReminder(){
+
+        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+
+        int tripNewHour = aa.equals("am") ? tripHour : tripHour + 12;
+
+        c.set(Calendar.YEAR, tripYear);
+        c.set(Calendar.MONTH, tripMonth);
+        c.set(Calendar.DAY_OF_MONTH, tripDay);
+        c.set(Calendar.HOUR, tripNewHour);
+        c.set(Calendar.MINUTE, tripMinute);
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        manager.set(AlarmManager.RTC, c.getTimeInMillis(), pendingIntent);
+        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 10000, pendingIntent);
+
+        Log.i(TAG, "i got here!");
+
     }
 }

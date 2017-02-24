@@ -37,7 +37,6 @@ public class CashedAdapter extends ArrayAdapter<Trip> {
         Trip mTrip = tripsList.get(position);
 
         viewCache.getTitleTV().setText(mTrip.getTitle());
-        viewCache.getStartTV().setText(mTrip.getStartPoint());
         viewCache.getEndTV().setText(mTrip.getEndPoint());
         viewCache.getDateTimeTV().setText(mTrip.getDateTime());
 

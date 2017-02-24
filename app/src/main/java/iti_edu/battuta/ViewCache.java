@@ -7,7 +7,7 @@ import android.widget.TextView;
 public class ViewCache {
 
     private View baseView;
-    private TextView titleTV, startTV, endTV, dateTimeTV;
+    private TextView titleTV, endTV, dateTimeTV;
 
     public View getBaseView(){
         return baseView;
@@ -26,11 +26,6 @@ public class ViewCache {
     public TextView getEndTV() {
         if(endTV == null) endTV = (TextView) baseView.findViewById(R.id.tvEndPoint);
         return endTV;
-    }
-
-    public TextView getStartTV() {
-        if(startTV == null) startTV = (TextView) baseView.findViewById(R.id.tvStartPoint);
-        return startTV;
     }
 
     public ViewCache(View baseView){
