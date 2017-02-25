@@ -75,6 +75,8 @@
     <string name="info_start">Start</string>
     <string name="info_edit">Edit</string>
     <string name="info_delete">Delete</string>
+    <string name="info_done">Done</string>
+    <string name="info_reverse">To\n&lt;  &gt;</string>
 
 
 </resources>

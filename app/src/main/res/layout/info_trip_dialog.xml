@@ -1,68 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cast_expanded_controller_ad_label_background_color">
 
-        <FrameLayout
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:background="@android:color/background_light"
+        android:elevation="5dp"
+        android:padding="20dp">
+
+        <ScrollView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_gravity="center"
-            android:elevation="5dp"
-            android:background="@android:color/background_light"
-            android:padding="20dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.02">
+
+                    <Button
+                        android:id="@+id/info_share_infoBtn"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_weight="0.02"
+                        android:background="@drawable/ic_menu_share"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true" />
+
+                    <Switch
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/info_switch"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:text="@string/upcoming"
+                        android:checked="true"
+                        android:textColor="@android:color/darker_gray" />
+
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/info_titleTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_weight="0.02"
                     android:text="My Trip Title"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textColor="@android:color/black" />
 
-                <TextView
-                    android:id="@+id/info_startAddressTV"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="this is the starting location"
-                    android:textAlignment="center"
-                    android:textColor="@color/cast_intro_overlay_background_color" />
+                    android:layout_height="50dp"
+                    android:layout_weight="0.02"
+                    android:layout_marginTop="10dp">
 
-                <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="TO"
-                    android:textColor="@color/cast_intro_overlay_background_color" />
+                    <TextView
+                        android:id="@+id/info_startAddressTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_toStartOf="@+id/info_reverseBtn"
+                        android:layout_weight="0.02"
+                        android:gravity="center"
+                        android:paddingRight="5dp"
+                        android:text="this is the starting location"
+                        android:textAlignment="center"
+                        android:textColor="@color/cast_intro_overlay_background_color" />
 
-                <TextView
-                    android:id="@+id/info_destinationTV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="this is the destination location"
-                    android:textAlignment="center"
-                    android:textColor="@color/cast_intro_overlay_background_color" />
+                    <TextView
+                        android:id="@+id/info_destinationTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/info_reverseBtn"
+                        android:layout_weight="0.02"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:text="this is the destination location"
+                        android:textAlignment="center"
+                        android:textColor="@color/cast_intro_overlay_background_color" />
 
-                <TextView
-                    android:id="@+id/textView15"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="AT"
-                    android:textColor="@color/cast_intro_overlay_background_color" />
+                    <Button
+                        android:id="@+id/info_reverseBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:elevation="2dp"
+                        android:minWidth="35dip"
+                        android:text="@string/info_reverse"
+                        android:background="@color/wallet_bright_foreground_holo_dark"
+                        android:textColor="@android:color/black"
+                        android:minHeight="35dip"
+                        android:gravity="center"
+                        android:foregroundGravity="center" />
+
+                </RelativeLayout>
+
 
                 <TextView
                     android:id="@+id/info_dateTimeTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
                     android:text="this is the time and date of the trip"
                     android:textAlignment="center"
                     android:textColor="@color/cast_intro_overlay_background_color" />
@@ -94,6 +145,6 @@
                         android:text="@string/info_delete" />
                 </LinearLayout>
             </LinearLayout>
-
-        </FrameLayout>
+        </ScrollView>
     </FrameLayout>
+</FrameLayout>

@@ -92,4 +92,10 @@ public class Trip implements Serializable {
         return notes;
     }
 
+    public void set_infoReverse(){
+        String infostart = this.endPoint;
+        this.endPoint = this.getStartPoint();
+        this.startPoint=infostart;
+    }
+
 }

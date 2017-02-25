@@ -69,22 +69,44 @@ public class TripInfoActivity extends AppCompatActivity {
                 AlertDialog.Builder a_builder = new AlertDialog.Builder(TripInfoActivity.this);
                 a_builder.setMessage("Do you want to Delete this Trip !!!")
                         .setCancelable(false)
-                        .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 setResult(RESULT_OK);
                                 finish();
                             }
                         })
-                        .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
                             }
-                        }) ;
+                        });
                 AlertDialog alert = a_builder.create();
                 alert.setTitle("Alert !!!");
                 alert.show();
+            }
+        });
+
+        Button infoshare = (Button) findViewById(R.id.info_share_infoBtn);
+        infoshare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, trip.getTitle() + "\n" + trip.getDateTime() + "\n" + getDirectionsURI());
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent, "Share Trip"));
+
+            }
+        });
+
+        Button reverseBtn = (Button) findViewById(R.id.info_reverseBtn);
+        reverseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startTV.setText(trip.getEndPoint());
+                endTV.setText(trip.getStartPoint());
+                trip.set_infoReverse();
             }
         });
 

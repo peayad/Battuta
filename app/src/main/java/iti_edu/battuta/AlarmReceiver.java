@@ -48,7 +48,10 @@ public class AlarmReceiver extends BroadcastReceiver{
         try {
             Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             Ringtone r = RingtoneManager.getRingtone(appContext, notification);
+            long[] v = {100,1000};
+            builder.setVibrate(v);
             r.play();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
