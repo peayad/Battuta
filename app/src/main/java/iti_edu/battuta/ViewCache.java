@@ -1,7 +1,6 @@
 package iti_edu.battuta;
 
 import android.view.View;
-import android.widget.Switch;
 import android.widget.TextView;
 
 public class ViewCache {

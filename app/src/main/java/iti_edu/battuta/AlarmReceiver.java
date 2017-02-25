@@ -22,12 +22,15 @@ public class AlarmReceiver extends BroadcastReceiver{
 
     Context appContext;
     String contentext ="Battuta reminder you for your information trip";
+    Trip receivedTrip;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "i got here!");
 
         appContext = context;
+        receivedTrip = (Trip) intent.getSerializableExtra("trip");
+
         String tripTitle = intent.getStringExtra("title");
         Toast.makeText(context, tripTitle + "should begin now!", Toast.LENGTH_SHORT).show();
         showNormalViewNotification();

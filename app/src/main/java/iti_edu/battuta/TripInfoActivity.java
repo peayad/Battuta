@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -110,6 +112,14 @@ public class TripInfoActivity extends AppCompatActivity {
             }
         });
 
+        Switch tripDone = (Switch) findViewById(R.id.info_switch);
+        tripDone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // TODO change trip to isDone
+                finish();
+            }
+        });
 
     }
 

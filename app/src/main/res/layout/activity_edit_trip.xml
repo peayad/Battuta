@@ -55,7 +55,7 @@
                         android:layout_marginLeft="5dp" />
 
                     <fragment
-                        android:id="@+id/start_place_fragment"
+                        android:id="@+id/edit_start_place_fragment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
@@ -72,7 +72,7 @@
                         android:layout_marginLeft="5dp" />
 
                     <fragment
-                        android:id="@+id/end_place_fragment"
+                        android:id="@+id/edit_end_place_fragment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"

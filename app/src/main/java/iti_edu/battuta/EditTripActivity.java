@@ -10,7 +10,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,6 +47,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     private Place startPlace, endPlace;
 
     private EditText titleET, dateTimeET, notesET;
+    private SupportPlaceAutocompleteFragment startFrag, endFrag;
     private Switch isRoundSwitch;
 
     private Calendar calendar;
@@ -76,6 +76,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         initPlaceFragments();
         initDateTime();
         initButtons();
+        isEditingTrip();
     }
 
     void initEditTexts() {
@@ -85,13 +86,13 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     }
 
     void initPlaceFragments() {
-        SupportPlaceAutocompleteFragment startLocationFrag = (SupportPlaceAutocompleteFragment)
-                getSupportFragmentManager().findFragmentById(R.id.start_place_fragment);
-        startLocationFrag.setOnPlaceSelectedListener(new MyPlaceSelectionListener(PICK_START));
+        startFrag = (SupportPlaceAutocompleteFragment)
+                getSupportFragmentManager().findFragmentById(R.id.edit_start_place_fragment);
+        startFrag.setOnPlaceSelectedListener(new MyPlaceSelectionListener(PICK_START));
 
-        SupportPlaceAutocompleteFragment endLocationFrag = (SupportPlaceAutocompleteFragment)
-                getSupportFragmentManager().findFragmentById(R.id.end_place_fragment);
-        endLocationFrag.setOnPlaceSelectedListener(new MyPlaceSelectionListener(PICK_END));
+        endFrag = (SupportPlaceAutocompleteFragment)
+                getSupportFragmentManager().findFragmentById(R.id.edit_end_place_fragment);
+        endFrag.setOnPlaceSelectedListener(new MyPlaceSelectionListener(PICK_END));
     }
 
     class MyPlaceSelectionListener implements PlaceSelectionListener {
@@ -263,9 +264,12 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         Trip editedTrip = (Trip) sourceIntent.getSerializableExtra("trip");
         if (editedTrip != null) {
             titleET.setText(editedTrip.getTitle());
+            startFrag.setText(editedTrip.getStartPoint());
+            endFrag.setText(editedTrip.getEndPoint());
             dateTimeET.setText(editedTrip.getDateTime());
             isRoundSwitch.setChecked(editedTrip.getIsRound() == 1);
             notesET.setText(editedTrip.getNotes());
+
             return true;
         }
         return false;
@@ -297,10 +301,8 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
             Log.i(TAG, "didn't happen");
         }
 
-
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         manager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-//        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 10000, pendingIntent);
 
         SimpleDateFormat formatter = new SimpleDateFormat("DD-MMM-yyyy hh:mm aa");
         String currentDate = formatter.format(c.getTimeInMillis());
