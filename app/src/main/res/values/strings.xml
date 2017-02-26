@@ -68,6 +68,7 @@
     <string name="roundTrip">Round Trip</string>
     <string name="notes">Notes</string>
     <string name="save_trip">Save Trip</string>
+    <string name="update_trip">Update Trip</string>
     <string name="start_trip">Start Trip</string>
     <string name="edit_trip">Edit Trip</string>
     <string name="starting_location">Starting Location</string>

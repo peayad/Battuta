@@ -10,16 +10,18 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-public class BattutaDBadapter {
+import static android.database.DatabaseUtils.queryNumEntries;
+
+class BattutaDBadapter {
 
     private static final String TAG = "ptr-DBadapter";
     BattutaDBhelper helper;
 
-    BattutaDBadapter(Context context){
+    BattutaDBadapter(Context context) {
         helper = new BattutaDBhelper(context);
     }
 
-    public boolean insertTrip(Trip trip) {
+    boolean insertTrip(Trip trip) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -37,41 +39,63 @@ public class BattutaDBadapter {
         return true;
     }
 
-    public int numberOfRows() {
+    private int numberOfRows() {
         SQLiteDatabase db = helper.getReadableDatabase();
-        int numRows = (int) DatabaseUtils.queryNumEntries(db, helper.TABLE_NAME);
-        return numRows;
+        return (int) queryNumEntries(db, BattutaDBhelper.TABLE_NAME);
     }
 
-    public Integer updateTrip(Integer id, String title) {
+    int getTripID(Trip trip) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cur = db.rawQuery("SELECT * FROM " + BattutaDBhelper.TABLE_NAME + " WHERE Title = ?", new String[]{trip.getTitle()});
+        while (cur.moveToNext()) {
+            int indexID = cur.getColumnIndex(BattutaDBhelper.ID);
+            int tripID = cur.getInt(indexID);
+            return tripID;
+        }
+        cur.close();
+        return -1;
+    }
+
+    void updateTrip(int id, Trip newTrip) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        return db.delete(helper.TABLE_NAME, helper.ID + " = ? ", new String[]{Integer.toString(id)});
+
+        ContentValues cv = new ContentValues();
+        cv.put(BattutaDBhelper.TITLE, newTrip.getTitle());
+        cv.put(BattutaDBhelper.DATE_TIME, newTrip.getDateTime());
+        cv.put(BattutaDBhelper.START_LOC, newTrip.getStartPoint());
+        cv.put(BattutaDBhelper.END_LOC, newTrip.getEndPoint());
+        cv.put(BattutaDBhelper.ONE_ROUND, newTrip.getIsRound());
+        cv.put(BattutaDBhelper.DONE, newTrip.getIsDone());
+        cv.put(BattutaDBhelper.NOTES, newTrip.getNotes());
+
+        db.update(BattutaDBhelper.TABLE_NAME, cv, BattutaDBhelper.ID + " = ? ", new String[]{Integer.toString(id)});
     }
 
-    public void deleteTrip(Trip trip) {
+    void deleteTrip(Trip trip) {
         SQLiteDatabase db = helper.getWritableDatabase();
         String[] selectionArgs = {Integer.toString(trip.getId())};
-        db.delete(helper.TABLE_NAME, helper.ID + " = ?", selectionArgs);
+        db.delete(BattutaDBhelper.TABLE_NAME, BattutaDBhelper.ID + " = ?", selectionArgs);
     }
 
 
-    public ArrayList<Trip> getAllTrips() {
+    ArrayList<Trip> getAllTrips() {
         ArrayList<Trip> array_list = new ArrayList<>();
         SQLiteDatabase db = helper.getReadableDatabase();
 
-        Cursor cur = db.rawQuery("SELECT * FROM " + helper.TABLE_NAME, null);
-//        cur.moveToPosition(0);
+        Cursor cur = db.rawQuery("SELECT * FROM " + BattutaDBhelper.TABLE_NAME, null);
+        Log.i(TAG, "id starting");
         while (cur.moveToNext()) {
-            int index0 = cur.getColumnIndex(helper.ID);
-            int index1 = cur.getColumnIndex(helper.TITLE);
-            int index2 = cur.getColumnIndex(helper.DATE_TIME);
-            int index4 = cur.getColumnIndex(helper.START_LOC);
-            int index5 = cur.getColumnIndex(helper.END_LOC);
-            int index6 = cur.getColumnIndex(helper.ONE_ROUND);
-            int index7 = cur.getColumnIndex(helper.DONE);
-            int index8 = cur.getColumnIndex(helper.NOTES);
+            int index0 = cur.getColumnIndex(BattutaDBhelper.ID);
+            int index1 = cur.getColumnIndex(BattutaDBhelper.TITLE);
+            int index2 = cur.getColumnIndex(BattutaDBhelper.DATE_TIME);
+            int index4 = cur.getColumnIndex(BattutaDBhelper.START_LOC);
+            int index5 = cur.getColumnIndex(BattutaDBhelper.END_LOC);
+            int index6 = cur.getColumnIndex(BattutaDBhelper.ONE_ROUND);
+            int index7 = cur.getColumnIndex(BattutaDBhelper.DONE);
+            int index8 = cur.getColumnIndex(BattutaDBhelper.NOTES);
 
             int id = cur.getInt(index0);
+            Log.i(TAG, "id : " + id);
             String title = cur.getString(index1);
             String dateTime = cur.getString(index2);
             String start_loc = cur.getString(index4);
@@ -84,16 +108,19 @@ public class BattutaDBadapter {
 
             array_list.add(trip);
         }
+        cur.close();
+
+        Log.i(TAG, "id ended");
         return array_list;
     }
 
-    public void deleteTable() {
+    void deleteTable() {
         SQLiteDatabase db = helper.getWritableDatabase();
         db.execSQL(helper.DROP_TRIP_TABLE);
         helper.onCreate(db);
     }
 
-    private static class BattutaDBhelper extends SQLiteOpenHelper{
+    private static class BattutaDBhelper extends SQLiteOpenHelper {
 
 
         private static final String DATABASE_NAME = "battuta.db";
@@ -124,7 +151,7 @@ public class BattutaDBadapter {
         private static final int DATABASE_VERSION = 1;
 
 
-        public BattutaDBhelper(Context context) {
+        BattutaDBhelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 

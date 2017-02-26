@@ -12,7 +12,7 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO loop through all upcoming trips and create reminder
+        // TODO loop through all upcoming trips in database and create reminders for them
         createReminder(context);
     }
 

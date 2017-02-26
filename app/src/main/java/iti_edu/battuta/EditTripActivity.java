@@ -42,6 +42,8 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     private static final String TAG = "ptr-editTrip";
     private static final int PICK_START = 1, PICK_END = 2;
 
+
+    private BattutaDBadapter mDBhelper;
     private GoogleApiClient mGoogleApiClient;
 
     private Place startPlace, endPlace;
@@ -49,6 +51,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     private EditText titleET, dateTimeET, notesET;
     private SupportPlaceAutocompleteFragment startFrag, endFrag;
     private Switch isRoundSwitch;
+    private Button saveTripBtn;
 
     private Calendar calendar;
     private String dateTimeStr;
@@ -57,6 +60,9 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     static final int TIME_DIALOG_ID = 1;
     private int tripYear, tripMonth, tripDay, tripHour, tripMinute;
 
+    private boolean isEditingTrip;
+    private Trip editedTrip;
+
     String aa = "";
 
 
@@ -64,6 +70,8 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_trip);
+
+        mDBhelper = new BattutaDBadapter(getApplicationContext());
 
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
@@ -76,7 +84,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         initPlaceFragments();
         initDateTime();
         initButtons();
-        isEditingTrip();
+        checkSaveOrEdit();
     }
 
     void initEditTexts() {
@@ -177,20 +185,23 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
             }
         });
 
-        Button saveTripBtn = (Button) findViewById(R.id.edit_btnSaveTrip);
+        saveTripBtn = (Button) findViewById(R.id.edit_btnSaveTrip);
         saveTripBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!hasNotEnteredAllDetails()) {
-                    if (isEditingTrip()) {
+
+                    Log.i(TAG, "isEditingTrip: " + isEditingTrip);
+
+                    if (isEditingTrip) {
                         editTripData();
                     } else {
                         addTripData();
-                        Intent returnIntent = new Intent();
-                        setResult(Activity.RESULT_OK, returnIntent);
                     }
 
-                    createReminder();
+                    Intent returnIntent = new Intent();
+                    setResult(Activity.RESULT_OK, returnIntent);
+//                    createReminder();
                     finish();
 
                 } else {
@@ -251,32 +262,37 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     }
 
     private void addTripData() {
-        BattutaDBadapter mDBhelper = new BattutaDBadapter(getApplicationContext());
         mDBhelper.insertTrip(getTripData());
     }
 
     private void editTripData() {
-        //TODO Tasnim
+        mDBhelper.updateTrip(editedTrip.getId(), getTripData());
     }
 
-    private boolean isEditingTrip() {
+    private void checkSaveOrEdit() {
         Intent sourceIntent = getIntent();
-        Trip editedTrip = (Trip) sourceIntent.getSerializableExtra("trip");
-        if (editedTrip != null) {
-            titleET.setText(editedTrip.getTitle());
-            startFrag.setText(editedTrip.getStartPoint());
-            endFrag.setText(editedTrip.getEndPoint());
-            dateTimeET.setText(editedTrip.getDateTime());
-            isRoundSwitch.setChecked(editedTrip.getIsRound() == 1);
-            notesET.setText(editedTrip.getNotes());
+        Trip intentTrip = (Trip) sourceIntent.getSerializableExtra("trip");
 
-            return true;
-        }
-        return false;
+        if (intentTrip == null) return;
+
+        editedTrip = intentTrip;
+        editedTrip.setId(mDBhelper.getTripID(editedTrip));
+        titleET.setText(editedTrip.getTitle());
+        startFrag.setText(editedTrip.getStartPoint());
+        endFrag.setText(editedTrip.getEndPoint());
+        dateTimeET.setText(editedTrip.getDateTime());
+        isRoundSwitch.setChecked(editedTrip.getIsRound() == 1);
+        notesET.setText(editedTrip.getNotes());
+
+        dateTimeStr = editedTrip.getDateTime();
+
+        isEditingTrip = true;
+        saveTripBtn.setText(R.string.update_trip);
+
     }
 
     private boolean hasNotEnteredAllDetails() {
-        Log.i(TAG, "i am here now");
+        Log.i(TAG, "checking if user has entered all details");
         return titleET.getText().toString().equals("") ||
                 dateTimeET.getText().toString().equals("");
 

@@ -91,6 +91,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        updateListView();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -147,10 +153,11 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_upcoming) {
             // TODO - change list view items
+            Toast.makeText(getApplicationContext(), "Should show upcoming trips", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_passed) {
             // TODO - change list view items
-            Toast.makeText(getApplicationContext(), "Should Sync with Firebase later :)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Should show passed trips", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_sync) {
             // TODO - sync data with firebase
@@ -169,7 +176,8 @@ public class MainActivity extends AppCompatActivity
             aboutDialog.show();
 
         } else if (id == R.id.nav_languages) {
-            // TODO - show dialoge
+            // TODO - show dialog to change languages
+            Toast.makeText(getApplicationContext(), "Should change app language", Toast.LENGTH_SHORT).show();
 
 
         } else if (id == R.id.nav_logout) {
@@ -192,20 +200,20 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ADD_TRIP_REQUEST) {
             if (resultCode == RESULT_OK) {
-                tripList = myDBhelper.getAllTrips();
-                myCashedAdapter.clear();
-                myCashedAdapter.addAll(tripList);
-
                 Snackbar.make(findViewById(R.id.content_main), R.string.snackbar_trip_added, Snackbar.LENGTH_SHORT).show();
             }
         } else if (requestCode == TRIP_INFO_REQUEST) {
             if (resultCode == RESULT_OK) {
                 myDBhelper.deleteTrip(selectedTrip);
-                tripList = myDBhelper.getAllTrips();
-                myCashedAdapter.clear();
-                myCashedAdapter.addAll(tripList);
                 Snackbar.make(findViewById(R.id.content_main), R.string.snackbar_trip_deleted, Snackbar.LENGTH_SHORT).show();
             }
         }
+    }
+
+    void updateListView(){
+        tripList = myDBhelper.getAllTrips();
+        myCashedAdapter.clear();
+        myCashedAdapter.addAll(tripList);
+        myCashedAdapter.notifyDataSetChanged();
     }
 }
