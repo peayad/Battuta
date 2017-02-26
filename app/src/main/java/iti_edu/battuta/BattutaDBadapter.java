@@ -56,6 +56,11 @@ class BattutaDBadapter {
         return -1;
     }
 
+    void setTripIsDone(Trip trip){
+        trip.setIsDone(1);
+        updateTrip(trip.getId(),trip);
+    }
+
     void updateTrip(int id, Trip newTrip) {
         SQLiteDatabase db = helper.getWritableDatabase();
 

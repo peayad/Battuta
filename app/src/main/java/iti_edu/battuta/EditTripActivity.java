@@ -47,6 +47,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     private GoogleApiClient mGoogleApiClient;
 
     private Place startPlace, endPlace;
+    private String startAddress, endAddress;
 
     private EditText titleET, dateTimeET, notesET;
     private SupportPlaceAutocompleteFragment startFrag, endFrag;
@@ -115,8 +116,10 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         public void onPlaceSelected(Place place) {
             if (picker == PICK_START) {
                 startPlace = place;
+                startAddress = startPlace.getAddress().toString();
             } else if (picker == PICK_END) {
                 endPlace = place;
+                endAddress = endPlace.getAddress().toString();
             }
             Log.i(TAG, "Place: " + place.getName());
         }
@@ -217,9 +220,8 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
             the map http link format should be like this:
             http://maps.google.com/maps?saddr= lat,long &daddr= lat,long
         */
-        String startLatLng = startPlace.getLatLng().latitude + "," + startPlace.getLatLng().longitude;
-        String endLatLng = endPlace.getLatLng().latitude + "," + endPlace.getLatLng().longitude;
-        return Uri.parse("http://maps.google.com/maps?saddr=" + startLatLng + "&daddr=" + endLatLng);
+        String dir = String.format("http://maps.google.com/maps?saddr=%s&daddr=%s", startAddress, endAddress);
+        return Uri.parse(dir);
     }
 
 
@@ -252,8 +254,8 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
     private Trip getTripData() {
         String tTitle = titleET.getText().toString() + "";
-        String tStart = startPlace != null ? startPlace.getAddress().toString() + "" : "";
-        String tEnd = endPlace != null ? endPlace.getAddress().toString() + "" : "";
+        String tStart = startAddress + "";
+        String tEnd = endAddress + "";
         String tDateTime = dateTimeStr + "";
         int tIsRound = isRoundSwitch.isChecked() ? 1 : 0;
         String tNotes = notesET.getText().toString() + "";
@@ -278,8 +280,15 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         editedTrip = intentTrip;
         editedTrip.setId(mDBhelper.getTripID(editedTrip));
         titleET.setText(editedTrip.getTitle());
-        startFrag.setText(editedTrip.getStartPoint());
-        endFrag.setText(editedTrip.getEndPoint());
+
+        String startPoint = editedTrip.getStartPoint();
+        startFrag.setText(startPoint);
+        startAddress = startPoint;
+
+        String endPoint = editedTrip.getEndPoint();
+        endFrag.setText(endPoint);
+        endAddress = endPoint;
+
         dateTimeET.setText(editedTrip.getDateTime());
         isRoundSwitch.setChecked(editedTrip.getIsRound() == 1);
         notesET.setText(editedTrip.getNotes());
@@ -293,8 +302,8 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
     private boolean hasNotEnteredAllDetails() {
         Log.i(TAG, "checking if user has entered all details");
-        return titleET.getText().toString().equals("") ||
-                dateTimeET.getText().toString().equals("");
+        return startAddress == null|| endAddress == null ||
+                titleET.getText().toString().equals("") || dateTimeET.getText().toString().equals("");
 
     }
 

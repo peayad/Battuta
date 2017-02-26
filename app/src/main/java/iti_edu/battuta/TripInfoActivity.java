@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class TripInfoActivity extends AppCompatActivity {
 
     TextView titleTV, startTV, endTV, dateTimeTV;
-    Button startBtn, editBtn, deleteBtn;
+    Trip trip;
 
     final private int TRIP_EDIT_REQUEST = 0;
 
@@ -27,7 +27,7 @@ public class TripInfoActivity extends AppCompatActivity {
         setContentView(R.layout.info_trip_dialog);
 
         Intent sourceIntent = getIntent();
-        final Trip trip = (Trip) sourceIntent.getSerializableExtra("trip");
+        trip = (Trip) sourceIntent.getSerializableExtra("trip");
 
         titleTV = (TextView) findViewById(R.id.info_titleTV);
         titleTV.setText(trip.getTitle());
@@ -129,7 +129,8 @@ public class TripInfoActivity extends AppCompatActivity {
             the map http link format should be like this:
             http://maps.google.com/maps?saddr= lat,long &daddr= lat,long
         */
-        return Uri.parse("https://www.google.com/maps?saddr=Current+Location&daddr=Cairo");
+        String dir = String.format("https://www.google.com/maps?saddr=%s&daddr=%s", trip.getStartPoint(), trip.getEndPoint());
+        return Uri.parse(dir);
     }
 
 }
