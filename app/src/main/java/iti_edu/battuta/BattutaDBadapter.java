@@ -84,11 +84,48 @@ class BattutaDBadapter {
 
 
     ArrayList<Trip> getAllTrips() {
+        // TODO - use it with Sync Firebase Later
         ArrayList<Trip> array_list = new ArrayList<>();
         SQLiteDatabase db = helper.getReadableDatabase();
 
         Cursor cur = db.rawQuery("SELECT * FROM " + BattutaDBhelper.TABLE_NAME, null);
         Log.i(TAG, "id starting");
+        while (cur.moveToNext()) {
+            int index0 = cur.getColumnIndex(BattutaDBhelper.ID);
+            int index1 = cur.getColumnIndex(BattutaDBhelper.TITLE);
+            int index2 = cur.getColumnIndex(BattutaDBhelper.DATE_TIME);
+            int index4 = cur.getColumnIndex(BattutaDBhelper.START_LOC);
+            int index5 = cur.getColumnIndex(BattutaDBhelper.END_LOC);
+            int index6 = cur.getColumnIndex(BattutaDBhelper.ONE_ROUND);
+            int index7 = cur.getColumnIndex(BattutaDBhelper.DONE);
+            int index8 = cur.getColumnIndex(BattutaDBhelper.NOTES);
+
+            int id = cur.getInt(index0);
+            Log.i(TAG, "id : " + id);
+            String title = cur.getString(index1);
+            String dateTime = cur.getString(index2);
+            String start_loc = cur.getString(index4);
+            String end_loc = cur.getString(index5);
+            int one_round = cur.getInt(index6);
+            int now_later = cur.getInt(index7);
+            String notes = cur.getString(index8);
+
+            Trip trip = new Trip(id, title, start_loc, end_loc, dateTime, one_round, now_later, notes);
+
+            array_list.add(trip);
+        }
+        cur.close();
+
+        Log.i(TAG, "id ended");
+        return array_list;
+    }
+
+
+    ArrayList<Trip> getTrips(int done) {
+        ArrayList<Trip> array_list = new ArrayList<>();
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cur = db.rawQuery("SELECT * FROM " + BattutaDBhelper.TABLE_NAME + " WHERE Done = ?",new String[]{String.valueOf(done)});
+        Log.i(TAG, "getTrips: " + done);
         while (cur.moveToNext()) {
             int index0 = cur.getColumnIndex(BattutaDBhelper.ID);
             int index1 = cur.getColumnIndex(BattutaDBhelper.TITLE);

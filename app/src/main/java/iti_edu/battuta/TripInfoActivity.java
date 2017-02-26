@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -113,14 +114,31 @@ public class TripInfoActivity extends AppCompatActivity {
         });
 
         Switch tripDone = (Switch) findViewById(R.id.info_switch);
+        boolean isTripDone = trip.getIsDone() > 0 ? true : false;
+        if(!isTripDone)
+            tripDone.setText(R.string.upcoming);
+        else
+            tripDone.setText(R.string.done);
+
+        tripDone.setChecked(!isTripDone);
         tripDone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // TODO change trip to isDone
+                if(isChecked)
+                    trip.setIsDone(0);
+                else
+                    trip.setIsDone(1);
                 finish();
             }
         });
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i("tas***", "onPause: " + trip.getId()+ trip.getIsDone());
+        BattutaDBadapter mDBhelper = new BattutaDBadapter(getApplicationContext());
+        mDBhelper.updateTrip(trip.getId(), trip);
     }
 
 

@@ -28,6 +28,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    static private int doneflag = 0;
+
     final static private String TAG = "ptr-main";
     final static private int ADD_TRIP_REQUEST = 0;
     final static private int TRIP_INFO_REQUEST = 1;
@@ -71,7 +73,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         myDBhelper = new BattutaDBadapter(getApplicationContext());
-        tripList = myDBhelper.getAllTrips();
+        //tripList = myDBhelper.getAllTrips();
+        tripList = myDBhelper.getTrips(doneflag);
         myCashedAdapter = new CashedAdapter(getApplicationContext(), tripList);
 
         ListView myListView = (ListView) findViewById(R.id.mainListView);
@@ -151,12 +154,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_upcoming) {
-            // TODO - change list view items
-            Toast.makeText(getApplicationContext(), "Should show upcoming trips", Toast.LENGTH_SHORT).show();
+            doneflag = 0;
+            updateListView();
 
         } else if (id == R.id.nav_passed) {
-            // TODO - change list view items
-            Toast.makeText(getApplicationContext(), "Should show passed trips", Toast.LENGTH_SHORT).show();
+            doneflag = 1;
+            updateListView();
 
         } else if (id == R.id.nav_sync) {
             // TODO - sync data with firebase
@@ -211,7 +214,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     void updateListView() {
-        tripList = myDBhelper.getAllTrips();
+        tripList = myDBhelper.getTrips(doneflag);
         myCashedAdapter.clear();
         myCashedAdapter.addAll(tripList);
         myCashedAdapter.notifyDataSetChanged();

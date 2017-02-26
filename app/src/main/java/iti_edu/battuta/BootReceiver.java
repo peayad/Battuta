@@ -14,6 +14,6 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         this.context = context;
         BattutaDBadapter mDBadapter = new BattutaDBadapter(context);
-        BattutaReminder.updateAllReminders(context, mDBadapter.getAllTrips());
+        BattutaReminder.updateAllReminders(context, mDBadapter.getTrips(0));
     }
 }
