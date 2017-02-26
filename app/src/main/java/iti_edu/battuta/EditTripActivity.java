@@ -204,7 +204,6 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
                     Intent returnIntent = new Intent();
                     setResult(Activity.RESULT_OK, returnIntent);
-//                    createReminder();
                     finish();
 
                 } else {
@@ -302,39 +301,8 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
 
     private boolean hasNotEnteredAllDetails() {
         Log.i(TAG, "checking if user has entered all details");
-        return startAddress == null|| endAddress == null ||
+        return startAddress == null || endAddress == null ||
                 titleET.getText().toString().equals("") || dateTimeET.getText().toString().equals("");
-
-    }
-
-    private void createReminder() {
-
-        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy  hh:mm aa");
-
-        try {
-            c.setTime(sdf.parse(dateTimeStr));
-            c.add(Calendar.MONTH, 1);
-            Log.i(TAG, "worked well!");
-            Log.i(TAG, System.currentTimeMillis() + "system time");
-            Log.i(TAG, c.getTimeInMillis() + "calendar time");
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Log.i(TAG, "didn't happen");
-        }
-
-        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        manager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-
-        SimpleDateFormat formatter = new SimpleDateFormat("DD-MMM-yyyy hh:mm aa");
-        String currentDate = formatter.format(c.getTimeInMillis());
-        Log.i(TAG, currentDate + " that's the current date");
-
-        Log.i(TAG, c.get(c.HOUR) + " look");
-        Log.i(TAG, c.get(c.MINUTE) + " look");
 
     }
 }

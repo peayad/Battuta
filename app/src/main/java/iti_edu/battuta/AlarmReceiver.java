@@ -16,20 +16,19 @@ import android.widget.Toast;
 
 import java.io.Serializable;
 
-public class AlarmReceiver extends BroadcastReceiver{
+public class AlarmReceiver extends BroadcastReceiver {
 
     final private String TAG = "ptr-AlarmReceiver";
 
     Context appContext;
-    String contentext ="Battuta reminder you for your information trip";
-    Trip receivedTrip;
+    Trip trip;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "i got here!");
 
         appContext = context;
-        receivedTrip = (Trip) intent.getSerializableExtra("trip");
+        trip = (Trip) intent.getSerializableExtra("trip");
 
         String tripTitle = intent.getStringExtra("title");
         Toast.makeText(context, tripTitle + "should begin now!", Toast.LENGTH_SHORT).show();
@@ -42,16 +41,16 @@ public class AlarmReceiver extends BroadcastReceiver{
 
         //Build the content of Notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(appContext);
-        builder.setContentTitle("Notification");
-        builder.setContentText(contentext);
+        builder.setContentTitle(trip.getTitle());
+        builder.setContentText(trip.getEndPoint());
         builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setTicker(" hey this is ticker.....!");
+        builder.setTicker("Up coming trip: " + trip.getTitle());
         builder.setAutoCancel(true);
 
         try {
             Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             Ringtone r = RingtoneManager.getRingtone(appContext, notification);
-            long[] v = {100,1000};
+            long[] v = {100, 1000};
             builder.setVibrate(v);
             r.play();
 
@@ -61,23 +60,20 @@ public class AlarmReceiver extends BroadcastReceiver{
 
 
         //provide Explicit intent,pending Intent and Back Stack Task Builder for Action Buttons
-
-        Trip myTrip = new Trip("my trip title", null, null, "kaman 7aba", 0, "trip notes");
-
         Intent intent = new Intent(appContext, TripInfoActivity.class);
-        intent.putExtra("trip", (Serializable) myTrip );
+        intent.putExtra("trip", (Serializable) trip);
 
         //Add the Back Stack using TaskBuilder and set the Intent to Pending Intent
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(appContext);
         stackBuilder.addParentStack(TripInfoActivity.class);
         stackBuilder.addNextIntent(intent);
 
-        PendingIntent pi = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = stackBuilder.getPendingIntent(trip.getId(), PendingIntent.FLAG_ONE_SHOT);
         builder.setContentIntent(pi);
 
         // Notification through notification Manage
         Notification notification = builder.build();
         NotificationManager manager = (NotificationManager) appContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(1234, notification);
+        manager.notify(trip.getId(), notification);
     }
 }

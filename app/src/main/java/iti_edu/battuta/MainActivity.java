@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatDialog;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "ptr-main";
+    final static private String TAG = "ptr-main";
     final static private int ADD_TRIP_REQUEST = 0;
     final static private int TRIP_INFO_REQUEST = 1;
 
@@ -204,16 +203,18 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (requestCode == TRIP_INFO_REQUEST) {
             if (resultCode == RESULT_OK) {
+                BattutaReminder.deleteReminder(getApplicationContext(), myDBhelper.getTripID(selectedTrip));
                 myDBhelper.deleteTrip(selectedTrip);
                 Snackbar.make(findViewById(R.id.content_main), R.string.snackbar_trip_deleted, Snackbar.LENGTH_SHORT).show();
             }
         }
     }
 
-    void updateListView(){
+    void updateListView() {
         tripList = myDBhelper.getAllTrips();
         myCashedAdapter.clear();
         myCashedAdapter.addAll(tripList);
         myCashedAdapter.notifyDataSetChanged();
+        BattutaReminder.updateAllReminders(getApplicationContext(), tripList);
     }
 }
