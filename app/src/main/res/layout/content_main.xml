@@ -13,6 +13,16 @@
     tools:context="iti_edu.battuta.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+    <TextView
+        android:text="Empty Trip List"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/emptyNoticeTV"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/cast_expanded_controller_ad_label_background_color"
+        android:textAllCaps="true" />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

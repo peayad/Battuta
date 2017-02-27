@@ -80,5 +80,7 @@
     <string name="info_done">Done</string>
     <string name="info_reverse">To\n&lt;  &gt;</string>
 
-
+    <string name="remind_later">Later</string>
+    <string name="remind_dismiss">Dismiss</string>
+    <string name="upcoming_trip">Upcoming Trip</string>
 </resources>

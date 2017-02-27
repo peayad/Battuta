@@ -10,7 +10,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatDialog;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -39,6 +38,8 @@ public class MainActivity extends AppCompatActivity
     final static private int ADD_TRIP_REQUEST = 0;
     final static private int TRIP_INFO_REQUEST = 1;
 
+    TextView emptyListNotice;
+
     private CashedAdapter myCashedAdapter;
     private BattutaDBadapter myDBhelper;
     private ArrayList<Trip> tripList = new ArrayList<>();
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.upcoming);
         setSupportActionBar(toolbar);
+
+        emptyListNotice = (TextView) findViewById(R.id.emptyNoticeTV);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -193,11 +196,6 @@ public class MainActivity extends AppCompatActivity
             aboutDialog.setCanceledOnTouchOutside(true);
             aboutDialog.show();
 
-        } else if (id == R.id.nav_languages) {
-            // TODO - show dialog to change languages
-            Toast.makeText(getApplicationContext(), "Should change app language", Toast.LENGTH_SHORT).show();
-
-
         } else if (id == R.id.nav_logout) {
             SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
             sharedPreferences.edit().putBoolean("isLoggedIn", false).apply();
@@ -231,9 +229,13 @@ public class MainActivity extends AppCompatActivity
 
     void updateListView() {
         tripList = myDBhelper.getTrips(doneflag);
+
+        int showNotice = tripList.size() == 0 ? View.VISIBLE : View.INVISIBLE;
+        emptyListNotice.setVisibility(showNotice);
+
         myCashedAdapter.clear();
         myCashedAdapter.addAll(tripList);
         myCashedAdapter.notifyDataSetChanged();
-        BattutaReminder.updateAllReminders(getApplicationContext(), tripList);
+        BattutaReminder.updateAllReminders(getApplicationContext(), myDBhelper.getTrips(0));
     }
 }

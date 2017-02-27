@@ -21,7 +21,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:id="@+id/info_content">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -33,7 +34,7 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_weight="0.02"
-                        android:background="@drawable/ic_menu_share"
+                        android:background="@drawable/ic_share"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentStart="true" />
 
@@ -43,9 +44,9 @@
                         android:id="@+id/info_switch"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:text="@string/upcoming"
+                        android:text="@string/upcoming_trip"
                         android:checked="true"
-                        android:textColor="@android:color/darker_gray" />
+                        android:textColor="?android:attr/textColorSecondary" />
 
                 </RelativeLayout>
 
@@ -117,6 +118,15 @@
                     android:text="this is the time and date of the trip"
                     android:textAlignment="center"
                     android:textColor="@color/cast_intro_overlay_background_color" />
+
+                <TextView
+                    android:id="@+id/info_notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="this is the trip notes"
+                    android:textAlignment="center"
+                    android:textColor="@color/cast_intro_overlay_background_color"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

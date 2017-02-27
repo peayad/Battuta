@@ -1,9 +1,16 @@
 package iti_edu.battuta;
 
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -18,6 +25,7 @@ class BattutaReminder {
 
     static void updateAllReminders(Context context, ArrayList<Trip> tripList) {
         for (Trip trip : tripList) {
+            if (trip.getIsDone() > 0) continue;
             createReminder(context, trip);
         }
     }
@@ -48,5 +56,50 @@ class BattutaReminder {
 
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         manager.cancel(pendingIntent);
+    }
+
+    static void showNotification(Context context, Trip trip) {
+        // This function was made by fatma ali to create a notification
+
+        String tripInfo =  trip.getEndPoint() + "\n" + trip.getDateTime();
+
+        //Build the content of Notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setContentTitle(trip.getTitle());
+        builder.setContentText(trip.getEndPoint());
+        builder.setSmallIcon(R.drawable.ic_stat_place);
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(tripInfo));
+        builder.setTicker("Upcoming Trip: " + trip.getTitle());
+        builder.setAutoCancel(true);
+
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(context, notification);
+            long[] v = {100, 1000};
+            builder.setVibrate(v);
+            r.play();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        //provide Explicit intent,pending Intent and Back Stack Task Builder for Action Buttons
+        Intent intent = new Intent(context, TripInfoActivity.class);
+        intent.putExtra("trip", (Serializable) trip);
+        intent.putExtra("isFromNotification", true);
+
+        //Add the Back Stack using TaskBuilder and set the Intent to Pending Intent
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(TripInfoActivity.class);
+        stackBuilder.addNextIntent(intent);
+
+        PendingIntent pi = stackBuilder.getPendingIntent(trip.getId(), PendingIntent.FLAG_ONE_SHOT);
+        builder.setContentIntent(pi);
+
+        // Notification through notification Manage
+        Notification notification = builder.build();
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(trip.getId(), notification);
     }
 }

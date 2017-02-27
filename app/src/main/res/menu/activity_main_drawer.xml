@@ -7,10 +7,10 @@
             <group>
                 <item android:title="@string/upcoming"
                     android:id="@+id/nav_upcoming"
-                    android:icon="@android:drawable/ic_media_play"/>
+                    android:icon="@drawable/ic_upcoming"/>
                 <item android:title="@string/passed"
                     android:id="@+id/nav_passed"
-                    android:icon="@android:drawable/ic_media_rew" />
+                    android:icon="@drawable/ic_passed" />
             </group>
         </menu>
     </item>
@@ -19,21 +19,18 @@
         <menu >
             <item android:title="@string/sync"
                 android:id="@+id/nav_sync"
-                android:icon="@android:drawable/ic_popup_sync" />
+                android:icon="@drawable/ic_sync" />
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_share"
                 android:title="@string/share" />
             <item android:title="@string/about"
                 android:id="@+id/nav_about"
-                android:icon="@android:drawable/ic_dialog_info" />
-            <item android:title="@string/languages"
-                android:id="@+id/nav_languages"
-                android:icon="@android:drawable/ic_menu_mapmode" />
+                android:icon="@drawable/ic_about" />
         </menu>
     </item>
     <item android:title="@string/logout"
         android:id="@+id/nav_logout"
-        android:icon="@android:drawable/ic_menu_revert" />
+        android:icon="@drawable/ic_logout" />
 
 </menu>
