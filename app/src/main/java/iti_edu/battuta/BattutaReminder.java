@@ -67,7 +67,7 @@ class BattutaReminder {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle(trip.getTitle());
         builder.setContentText(trip.getEndPoint());
-        builder.setSmallIcon(R.drawable.ic_stat_place);
+        builder.setSmallIcon(R.drawable.ic_compass);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(tripInfo));
         builder.setTicker("Upcoming Trip: " + trip.getTitle());
         builder.setAutoCancel(true);
