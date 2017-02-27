@@ -4,10 +4,10 @@
 
     <item android:title="@string/trips" >
         <menu >
-            <group >
+            <group>
                 <item android:title="@string/upcoming"
                     android:id="@+id/nav_upcoming"
-                    android:icon="@android:drawable/ic_media_play" />
+                    android:icon="@android:drawable/ic_media_play"/>
                 <item android:title="@string/passed"
                     android:id="@+id/nav_passed"
                     android:icon="@android:drawable/ic_media_rew" />

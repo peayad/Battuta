@@ -16,7 +16,8 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="20dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -32,8 +33,7 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="50sp"
                 android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginTop="50dp" />
+                android:gravity="center" />
 
             <ProgressBar
                 android:id="@+id/login_progress"
@@ -62,7 +62,8 @@
                         android:hint="@string/prompt_email"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:imeOptions="actionNext"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -77,10 +78,10 @@
                         android:hint="@string/prompt_password"
                         android:imeActionId="@+id/login"
                         android:imeActionLabel="@string/action_sign_in_short"
-                        android:imeOptions="actionUnspecified"
+                        android:imeOptions="actionDone"
                         android:inputType="textPassword"
                         android:maxLines="1"
-                        android:singleLine="true" />
+                        android:singleLine="true"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -91,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/action_sign_in"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
             </LinearLayout>
         </LinearLayout>

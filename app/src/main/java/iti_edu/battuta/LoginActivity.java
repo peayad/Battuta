@@ -363,6 +363,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void launchMainActivity(){
         SharedPreferences prefs = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
         prefs.edit().putBoolean("isLoggedIn", true).apply();
+        prefs.edit().putString("email", mEmailView.getText().toString()).apply();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

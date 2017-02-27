@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatDialog;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.Serializable;
@@ -27,6 +30,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    Toolbar toolbar;
 
     static private int doneflag = 0;
 
@@ -51,7 +56,8 @@ public class MainActivity extends AppCompatActivity
         loginPreferences = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.upcoming);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -73,7 +79,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         myDBhelper = new BattutaDBadapter(getApplicationContext());
-        //tripList = myDBhelper.getAllTrips();
         tripList = myDBhelper.getTrips(doneflag);
         myCashedAdapter = new CashedAdapter(getApplicationContext(), tripList);
 
@@ -89,6 +94,15 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(intent, TRIP_INFO_REQUEST);
             }
         });
+
+        String email = loginPreferences.getString("email", "");
+        View headerView = navigationView.getHeaderView(0);
+        TextView emailTV = (TextView) headerView.findViewById(R.id.tvUserEmail);
+        emailTV.setText(email);
+
+        String [] username = email.split("@");
+        TextView usernameTv = (TextView) headerView.findViewById(R.id.tvUsername);
+        usernameTv.setText(username[0]);
 
     }
 
@@ -147,17 +161,18 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
         int id = item.getItemId();
 
         if (id == R.id.nav_upcoming) {
+            toolbar.setTitle(R.string.upcoming);
             doneflag = 0;
             updateListView();
 
         } else if (id == R.id.nav_passed) {
+            toolbar.setTitle(R.string.passed);
             doneflag = 1;
             updateListView();
 
@@ -175,6 +190,7 @@ public class MainActivity extends AppCompatActivity
             AppCompatDialog aboutDialog = new AppCompatDialog(this);
             aboutDialog.setTitle("About!");
             aboutDialog.setContentView(R.layout.about_dialog);
+            aboutDialog.setCanceledOnTouchOutside(true);
             aboutDialog.show();
 
         } else if (id == R.id.nav_languages) {
