@@ -49,7 +49,7 @@
     <string name="languages">Languages</string>
     <string name="logout">Logout</string>
 
-    <string name="snackbar_trip_added">A new trip has been added!</string>
+    <string name="snackbar_trip_added">Trip added to your upcomming trips!</string>
     <string name="snackbar_trip_deleted">Trip deleted!</string>
 
     <!-- About Dialog -->

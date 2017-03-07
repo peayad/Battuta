@@ -3,6 +3,7 @@ package iti_edu.battuta;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 
@@ -35,7 +37,7 @@ public class TripInfoActivity extends AppCompatActivity {
         initButtons();
         initSwitch();
 
-        if(isFromNotification) trip.setIsDone(1);
+        if (isFromNotification) trip.setIsDone(1);
     }
 
     void initTextViews() {
@@ -52,9 +54,9 @@ public class TripInfoActivity extends AppCompatActivity {
         dateTimeTV.setText(trip.getDateTime());
 
         notesTV = (TextView) findViewById(R.id.info_notes);
-        if(isFromNotification){
+        if (isFromNotification) {
             ((ViewGroup) notesTV.getParent()).removeView(notesTV);
-        }else{
+        } else {
             notesTV.setText(trip.getNotes());
         }
     }
@@ -161,23 +163,36 @@ public class TripInfoActivity extends AppCompatActivity {
 
     void initSwitch() {
         Switch tripDone = (Switch) findViewById(R.id.info_switch);
-        if(isFromNotification){
+        if (isFromNotification) {
             tripDone.setVisibility(View.INVISIBLE);
         }
+
         boolean isTripDone = trip.getIsDone() > 0;
-        if (!isTripDone)
+        if (!isTripDone) {
             tripDone.setText(R.string.upcoming_trip);
-        else
+        } else {
             tripDone.setText(R.string.done);
+        }
 
         tripDone.setChecked(!isTripDone);
         tripDone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
+                if (isChecked) {
                     trip.setIsDone(0);
-                else
-                    trip.setIsDone(1);
+                    Toast.makeText(getApplicationContext(), "Your trip is set as not done!", Toast.LENGTH_SHORT).show();
+//                    finish();
+                } else {
+                    if (trip.getIsRound() == 1) {
+                        trip.setIsround(0);
+                        trip.set_infoReverse();
+                        Toast.makeText(getApplicationContext(), "Your trip has been reversed!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        trip.setIsDone(1);
+                        Toast.makeText(getApplicationContext(), "Your trip is set as done!", Toast.LENGTH_SHORT).show();
+//                        finish();
+                    }
+                }
                 finish();
             }
         });

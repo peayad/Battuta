@@ -34,7 +34,7 @@ class BattutaReminder {
     static void createReminder(Context context, Trip trip) {
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
         alarmIntent.putExtra("trip", (Serializable) trip);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, trip.getId(), alarmIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, trip.getId(), alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar c = Calendar.getInstance();
         String myFormat = "dd/MM/yyyy hh:mm aa";
@@ -52,7 +52,7 @@ class BattutaReminder {
 
     static void deleteReminder(Context context, int intentID) {
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, intentID, alarmIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, intentID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         manager.cancel(pendingIntent);
