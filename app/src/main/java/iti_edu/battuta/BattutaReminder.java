@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 class BattutaReminder {
 
@@ -36,14 +37,13 @@ class BattutaReminder {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, trip.getId(), alarmIntent, 0);
 
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy  hh:mm aa");
-
+        String myFormat = "dd/MM/yyyy hh:mm aa";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
         try {
             c.setTime(sdf.parse(trip.getDateTime()));
-            c.add(Calendar.MONTH, 1);
         } catch (ParseException e) {
             e.printStackTrace();
-            Log.i(TAG, "didn't happen");
+            return;
         }
 
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -61,7 +61,7 @@ class BattutaReminder {
     static void showNotification(Context context, Trip trip) {
         // This function was made by fatma ali to create a notification
 
-        String tripInfo =  trip.getEndPoint() + "\n" + trip.getDateTime();
+        String tripInfo = trip.getEndPoint() + "\n" + trip.getDateTime();
 
         //Build the content of Notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);

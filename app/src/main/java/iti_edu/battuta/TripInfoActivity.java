@@ -55,7 +55,7 @@ public class TripInfoActivity extends AppCompatActivity {
         if(isFromNotification){
             ((ViewGroup) notesTV.getParent()).removeView(notesTV);
         }else{
-            notesTV.setText(R.string.notes + ": " + trip.getNotes());
+            notesTV.setText(trip.getNotes());
         }
     }
 
@@ -65,6 +65,10 @@ public class TripInfoActivity extends AppCompatActivity {
         Button deleteBtn = (Button) findViewById(R.id.info_deleteBtn);
 
         if (isFromNotification) {
+            BattutaDBadapter myDBhelper = new BattutaDBadapter(this);
+            Intent sourceIntent = getIntent();
+            Trip selectedTrip = (Trip) sourceIntent.getSerializableExtra("trip");
+            BattutaReminder.deleteReminder(getApplicationContext(), myDBhelper.getTripID(selectedTrip));
             editBtn.setText(R.string.remind_later);
             editBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

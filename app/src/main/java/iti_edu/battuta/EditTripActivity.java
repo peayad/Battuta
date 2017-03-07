@@ -1,20 +1,13 @@
 package iti_edu.battuta;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Locale;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -46,6 +39,9 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     private BattutaDBadapter mDBhelper;
     private GoogleApiClient mGoogleApiClient;
 
+    TimePickerDialog timePickerDialog;
+    DatePickerDialog datePickerDialog;
+
     private Place startPlace, endPlace;
     private String startAddress, endAddress;
 
@@ -57,20 +53,15 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     private Calendar calendar;
     private String dateTimeStr;
 
-    static final int DATE_DIALOG_ID = 0;
-    static final int TIME_DIALOG_ID = 1;
-    private int tripYear, tripMonth, tripDay, tripHour, tripMinute;
-
     private boolean isEditingTrip;
     private Trip editedTrip;
-
-    String aa = "";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_trip);
+
+        calendar = Calendar.getInstance();
 
         mDBhelper = new BattutaDBadapter(getApplicationContext());
 
@@ -130,46 +121,6 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         }
     }
 
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case DATE_DIALOG_ID:
-                return new DatePickerDialog(this, myDateListener, tripYear, tripMonth, tripDay);
-            case TIME_DIALOG_ID:
-                return new TimePickerDialog(this, timeDate, tripHour, tripMinute, false);
-        }
-        return null;
-    }
-
-
-    private DatePickerDialog.OnDateSetListener myDateListener = new
-            DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int day) {
-                    dateTimeStr = day + "/" + month + "/" + year;
-                    showDialog(TIME_DIALOG_ID);
-                }
-            };
-
-    private TimePickerDialog.OnTimeSetListener timeDate = new TimePickerDialog.OnTimeSetListener() {
-
-        public void onTimeSet(TimePicker view, int hourOfDay, int minutes) {
-
-            aa = hourOfDay > 11 ? "pm" : "am";
-            String timeStr = String.valueOf(hourOfDay) + ":" + String.valueOf(minutes);
-            DateFormat sdf = new SimpleDateFormat("hh:mm");
-
-            try {
-                Date date = sdf.parse(timeStr);
-                dateTimeStr += "  " + sdf.format(date) + " " + aa;
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            dateTimeET.setText(dateTimeStr);
-        }
-    };
-
 
     void initButtons() {
         Button startTripBtn = (Button) findViewById(R.id.edit_btnStartTrip);
@@ -192,8 +143,9 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         saveTripBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!hasNotEnteredAllDetails()) {
-
+                // TODO this part is commented for debugging only
+//                if (!hasNotEnteredAllDetails()) {
+                if (true) {
                     Log.i(TAG, "isEditingTrip: " + isEditingTrip);
 
                     if (isEditingTrip) {
@@ -230,24 +182,52 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     }
 
 
-    @SuppressLint("NewApi")
     private void initDateTime() {
 
+        int mYear = calendar.get(Calendar.YEAR);
+        int mMonth = calendar.get(Calendar.MONTH);
+        int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int mMinute = calendar.get(Calendar.MINUTE);
+
+        timePickerDialog = new TimePickerDialog(EditTripActivity.this,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), hourOfDay, minute);
+                        String myFormat = "dd/MM/yyyy hh:mm aa";
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+                        dateTimeStr = sdf.format(calendar.getTime());
+                        dateTimeET.setText(dateTimeStr);
+                    }
+                }
+                , mHour, mMinute, false);
+
+        datePickerDialog = new DatePickerDialog(EditTripActivity.this,
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        Calendar c = Calendar.getInstance();
+                        c.set(year, monthOfYear, dayOfMonth);
+                        calendar = c;
+
+                        timePickerDialog.show();
+                    }
+                }, mYear, mMonth, mDay);
+
+
         dateTimeET = (EditText) findViewById(R.id.edit_date_time);
-
-        calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        tripYear = calendar.get(Calendar.YEAR);
-        tripMonth = calendar.get(Calendar.MONTH);
-        tripDay = calendar.get(Calendar.DAY_OF_MONTH);
-        tripHour = calendar.get(Calendar.HOUR_OF_DAY);
-        tripMinute = calendar.get(Calendar.MINUTE);
-
         dateTimeET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(DATE_DIALOG_ID);
+                datePickerDialog.show();
+
             }
+
         });
     }
 
