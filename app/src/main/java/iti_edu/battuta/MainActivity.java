@@ -1,7 +1,5 @@
 package iti_edu.battuta;
 
-import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
