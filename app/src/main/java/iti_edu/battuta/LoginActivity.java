@@ -3,6 +3,7 @@ package iti_edu.battuta;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +33,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,16 +75,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private BattutaDBadapter mDBhelper;
 
     private static final String EMAIL_PATTERN =
                      "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
+
+    public ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
         setContentView(R.layout.activity_login);
         // Set up the login form.
@@ -198,7 +210,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
-            launchMainActivity();
+            getTripsFromFirebase();
         }
 
     }
@@ -346,7 +358,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                finish();
+             //   finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -360,6 +372,44 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+
+
+
+    void getTripsFromFirebase(){
+
+        String userEmail = mEmailView.getText().toString();
+        String[] username = userEmail.split("@");
+
+        mDBhelper = new BattutaDBadapter(getApplicationContext());
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference userDB = database.getReference().child(username[0]);
+
+        showProgressDialog();
+        userDB.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren()) {
+                    for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
+                        Trip trip = messageSnapshot.getValue(Trip.class);
+                        mDBhelper.insertTrip(trip);
+                        Log.i("ptr-Login", "a new trip has been added " + trip.getId());
+                    }
+                    Toast.makeText(getApplicationContext(), "Trips has been retrieved", Toast.LENGTH_SHORT).show();
+                    hideProgressDialog();
+                }else{
+                    hideProgressDialog();
+                    Toast.makeText(getApplicationContext(), "Welcome to Battuta!", Toast.LENGTH_SHORT).show();
+                }
+                launchMainActivity();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "Disconnected from database!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void launchMainActivity(){
         SharedPreferences prefs = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
         prefs.edit().putBoolean("isLoggedIn", true).apply();
@@ -367,6 +417,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage("Loading ...");
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 }
 

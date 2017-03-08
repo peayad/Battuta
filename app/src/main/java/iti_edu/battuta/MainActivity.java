@@ -26,6 +26,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -105,7 +108,7 @@ public class MainActivity extends AppCompatActivity
         TextView emailTV = (TextView) headerView.findViewById(R.id.tvUserEmail);
         emailTV.setText(email);
 
-        String [] username = email.split("@");
+        String[] username = email.split("@");
         TextView usernameTv = (TextView) headerView.findViewById(R.id.tvUsername);
         usernameTv.setText(username[0]);
 
@@ -183,7 +186,15 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_sync) {
             // TODO - sync data with firebase
-            Toast.makeText(getApplicationContext(), "Should Sync with Firebase later :)", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "Should Sync with Firebase later :)", Toast.LENGTH_SHORT).show();
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            String userEmail = loginPreferences.getString("email", "");
+            String[] username = userEmail.split("@");
+            DatabaseReference userDB_ref = database.getReference().child(username[0]);
+
+            userDB_ref.setValue(myDBhelper.getAllTrips());
+            Toast.makeText(getApplicationContext(), "Synced with Firebase!", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_share) {
             Intent intent = new Intent(Intent.ACTION_SEND);

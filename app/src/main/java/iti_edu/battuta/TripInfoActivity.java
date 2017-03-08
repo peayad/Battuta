@@ -184,7 +184,7 @@ public class TripInfoActivity extends AppCompatActivity {
 //                    finish();
                 } else {
                     if (trip.getIsRound() == 1) {
-                        trip.setIsround(0);
+                        trip.setIsRound(0);
                         trip.set_infoReverse();
                         Toast.makeText(getApplicationContext(), "Your trip has been reversed!", Toast.LENGTH_SHORT).show();
                     } else {

@@ -13,6 +13,9 @@ public class Trip implements Serializable {
     private int isDone;
     private String notes;
 
+    public Trip(){
+
+    }
     public Trip(int id, String title, String startPoint, String endPoint, String dateTime, int isRound, int isDone, String notes)
     {
         this.id = id;
@@ -71,7 +74,7 @@ public class Trip implements Serializable {
     }
 
 
-    public void setIsround(int isRound){
+    public void setIsRound(int isRound){
         this.isRound = isRound;
     }
     public int getIsRound(){
