@@ -1,5 +1,7 @@
 package iti_edu.battuta;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -197,11 +199,16 @@ public class MainActivity extends AppCompatActivity
             aboutDialog.show();
 
         } else if (id == R.id.nav_logout) {
+            // remove flag from shared preferences
             SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
             sharedPreferences.edit().putBoolean("isLoggedIn", false).apply();
 
+            BattutaReminder.removeAllReminders(getApplicationContext(), myDBhelper.getTrips(0));
+
+            // delete database
             myDBhelper.deleteTable();
 
+            // move user to login screen
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             finish();
