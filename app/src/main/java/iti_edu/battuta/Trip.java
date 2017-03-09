@@ -13,11 +13,11 @@ public class Trip implements Serializable {
     private int isDone;
     private String notes;
 
-    public Trip(){
+    public Trip() {
 
     }
-    public Trip(int id, String title, String startPoint, String endPoint, String dateTime, int isRound, int isDone, String notes)
-    {
+
+    public Trip(int id, String title, String startPoint, String endPoint, String dateTime, int isRound, int isDone, String notes) {
         this.id = id;
         this.title = title;
         this.startPoint = startPoint;
@@ -28,8 +28,7 @@ public class Trip implements Serializable {
         this.notes = notes;
     }
 
-    public Trip(String title, String startPoint, String endPoint, String dateTime, int isRound, String notes)
-    {
+    public Trip(String title, String startPoint, String endPoint, String dateTime, int isRound, String notes) {
         this.title = title;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
@@ -38,67 +37,75 @@ public class Trip implements Serializable {
         this.notes = notes;
     }
 
-    public void setId(int id){
+    public void setId(int id) {
         this.id = id;
     }
-    public int getId(){
+
+    public int getId() {
         return id;
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         this.title = title;
     }
-    public String getTitle(){
+
+    public String getTitle() {
         return title;
     }
 
-    public void setStartPoint(String startPoint){
+    public void setStartPoint(String startPoint) {
         this.startPoint = startPoint;
     }
-    public String getStartPoint(){
+
+    public String getStartPoint() {
         return startPoint;
     }
 
-    public void setEndPoint(String endPoint){
+    public void setEndPoint(String endPoint) {
         this.endPoint = endPoint;
     }
-    public String getEndPoint(){
+
+    public String getEndPoint() {
         return endPoint;
     }
 
-    public void setDateTime(String dateTime){
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
-    public String getDateTime(){
+
+    public String getDateTime() {
         return dateTime;
     }
 
 
-    public void setIsRound(int isRound){
+    public void setIsRound(int isRound) {
         this.isRound = isRound;
     }
-    public int getIsRound(){
+
+    public int getIsRound() {
         return isRound;
     }
 
-    public void setIsDone(int isDone){
+    public void setIsDone(int isDone) {
         this.isDone = isDone;
     }
-    public int getIsDone(){
+
+    public int getIsDone() {
         return isDone;
     }
 
-    public void setNotes(String notes){
+    public void setNotes(String notes) {
         this.notes = notes;
     }
-    public String getNotes(){
+
+    public String getNotes() {
         return notes;
     }
 
-    public void set_infoReverse(){
+    public void set_infoReverse() {
         String infostart = this.endPoint;
         this.endPoint = this.getStartPoint();
-        this.startPoint=infostart;
+        this.startPoint = infostart;
     }
 
 }

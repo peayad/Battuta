@@ -24,8 +24,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,9 +44,10 @@ public class MainActivity extends AppCompatActivity
 
     TextView emptyListNotice;
 
+    FireDB fireDB;
     private CashedAdapter myCashedAdapter;
-    private BattutaDBadapter myDBhelper;
     private ArrayList<Trip> tripList = new ArrayList<>();
+
 
     SharedPreferences loginPreferences;
 
@@ -59,6 +61,12 @@ public class MainActivity extends AppCompatActivity
 
         loginPreferences = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
 
+        initUI();
+        initListView();
+        initFireDB();
+    }
+
+    private void initUI() {
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.upcoming);
@@ -84,8 +92,18 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        myDBhelper = new BattutaDBadapter(getApplicationContext());
-        tripList = myDBhelper.getTrips(doneflag);
+        String email = loginPreferences.getString("email", "");
+        View headerView = navigationView.getHeaderView(0);
+        TextView emailTV = (TextView) headerView.findViewById(R.id.tvUserEmail);
+        emailTV.setText(email);
+
+        String[] username = email.split("@");
+        TextView usernameTv = (TextView) headerView.findViewById(R.id.tvUsername);
+        usernameTv.setText(username[0]);
+    }
+
+    private void initListView() {
+
         myCashedAdapter = new CashedAdapter(getApplicationContext(), tripList);
 
         ListView myListView = (ListView) findViewById(R.id.mainListView);
@@ -100,16 +118,34 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(intent, TRIP_INFO_REQUEST);
             }
         });
+    }
 
-        String email = loginPreferences.getString("email", "");
-        View headerView = navigationView.getHeaderView(0);
-        TextView emailTV = (TextView) headerView.findViewById(R.id.tvUserEmail);
-        emailTV.setText(email);
+    private void initFireDB() {
+        fireDB = FireDB.getInstance();
+        FireDB.userDB_ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChildren()) {
+                    ArrayList<Trip> tempList = new ArrayList<Trip>();
+                    for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
+                        Trip trip = messageSnapshot.getValue(Trip.class);
+                        tempList.add(trip);
+                    }
+                    FireDB.updateTripLists(tempList);
+                    updateListView();
+                    Toast.makeText(getApplicationContext(), "Trips has been updated.", Toast.LENGTH_SHORT).show();
+//                    hideProgressDialog();
+                } else {
+//                    hideProgressDialog();
+                    Toast.makeText(getApplicationContext(), "Nothing to fetch!", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        String[] username = email.split("@");
-        TextView usernameTv = (TextView) headerView.findViewById(R.id.tvUsername);
-        usernameTv.setText(username[0]);
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
     }
 
     @Override
@@ -124,7 +160,6 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-
 
             if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
@@ -186,13 +221,13 @@ public class MainActivity extends AppCompatActivity
             // TODO - sync data with firebase
 //            Toast.makeText(getApplicationContext(), "Should Sync with Firebase later :)", Toast.LENGTH_SHORT).show();
 
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            String userEmail = loginPreferences.getString("email", "");
-            String[] username = userEmail.split("@");
-            DatabaseReference userDB_ref = database.getReference().child(username[0]);
-
-            userDB_ref.setValue(myDBhelper.getAllTrips());
-            Toast.makeText(getApplicationContext(), "Synced with Firebase!", Toast.LENGTH_SHORT).show();
+//            FirebaseDatabase database = FirebaseDatabase.getInstance();
+//            String userEmail = loginPreferences.getString("email", "");
+//            String[] username = userEmail.split("@");
+//            DatabaseReference userDB_ref = database.getReference().child(username[0]);
+//
+//            userDB_ref.setValue(myDBhelper.getAllTrips());
+//            Toast.makeText(getApplicationContext(), "Synced with Firebase!", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_share) {
             Intent intent = new Intent(Intent.ACTION_SEND);
@@ -212,10 +247,8 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
             sharedPreferences.edit().putBoolean("isLoggedIn", false).apply();
 
-            BattutaReminder.removeAllReminders(getApplicationContext(), myDBhelper.getTrips(0));
-
-            // delete database
-            myDBhelper.deleteTable();
+            // TODO Reminder
+//            BattutaReminder.removeAllReminders(getApplicationContext(), FireDB.upcommingTrips);
 
             // move user to login screen
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -236,22 +269,26 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (requestCode == TRIP_INFO_REQUEST) {
             if (resultCode == RESULT_OK) {
-                BattutaReminder.deleteReminder(getApplicationContext(), myDBhelper.getTripID(selectedTrip));
-                myDBhelper.deleteTrip(selectedTrip);
+                // TODO Reminder
+//                BattutaReminder.deleteReminder(getApplicationContext(), selectedTrip.getId());
+                // TODO FireDB deleteTrip function
+//                myDBhelper.deleteTrip(selectedTrip);
                 Snackbar.make(findViewById(R.id.content_main), R.string.snackbar_trip_deleted, Snackbar.LENGTH_SHORT).show();
             }
         }
     }
 
     void updateListView() {
-        tripList = myDBhelper.getTrips(doneflag);
 
-        int showNotice = tripList.size() == 0 ? View.VISIBLE : View.INVISIBLE;
+        int showNotice = FireDB.selectedTrips.size() == 0 ? View.VISIBLE : View.INVISIBLE;
         emptyListNotice.setVisibility(showNotice);
+
+        tripList = doneflag == 0? FireDB.upcommingTrips: FireDB.passedTrips;
 
         myCashedAdapter.clear();
         myCashedAdapter.addAll(tripList);
         myCashedAdapter.notifyDataSetChanged();
-        BattutaReminder.updateAllReminders(getApplicationContext(), myDBhelper.getTrips(0));
+        // TODO Reminder
+//        BattutaReminder.updateAllReminders(getApplicationContext(), FireDB.upcommingTrips);
     }
 }

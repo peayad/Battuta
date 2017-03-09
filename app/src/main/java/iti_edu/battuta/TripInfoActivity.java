@@ -201,8 +201,9 @@ public class TripInfoActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        BattutaDBadapter mDBhelper = new BattutaDBadapter(getApplicationContext());
-        mDBhelper.updateTrip(trip.getId(), trip);
+        // TODO firebase update trip on exit
+//        BattutaDBadapter mDBhelper = new BattutaDBadapter(getApplicationContext());
+//        mDBhelper.updateTrip(trip.getId(), trip);
     }
 
 
