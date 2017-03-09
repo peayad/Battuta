@@ -133,12 +133,9 @@ public class MainActivity extends AppCompatActivity
                     }
                     FireDB.updateTripLists(tempList);
                     updateListView();
-                    Toast.makeText(getApplicationContext(), "Trips has been updated.", Toast.LENGTH_SHORT).show();
-//                    hideProgressDialog();
-                } else {
-//                    hideProgressDialog();
-                    Toast.makeText(getApplicationContext(), "Nothing to fetch!", Toast.LENGTH_SHORT).show();
                 }
+
+                Toast.makeText(getApplicationContext(), "Trips has been updated", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -192,8 +189,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.action_feedback) {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
-            intent.setData(Uri.parse("mailto:battuta@iti.com"));
-            intent.putExtra(Intent.EXTRA_EMAIL, "battuta@iti.com");
+            intent.setData(Uri.parse("mailto:battuta.master@gmail.com"));
+            intent.putExtra(Intent.EXTRA_EMAIL, "battuta.master@gmail.com");
             intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback");
             intent.putExtra(Intent.EXTRA_TEXT, "Hello,\n this is my feedback for Battuta App.");
             startActivity(intent);
@@ -219,15 +216,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_sync) {
             // TODO - sync data with firebase
-//            Toast.makeText(getApplicationContext(), "Should Sync with Firebase later :)", Toast.LENGTH_SHORT).show();
-
-//            FirebaseDatabase database = FirebaseDatabase.getInstance();
-//            String userEmail = loginPreferences.getString("email", "");
-//            String[] username = userEmail.split("@");
-//            DatabaseReference userDB_ref = database.getReference().child(username[0]);
-//
-//            userDB_ref.setValue(myDBhelper.getAllTrips());
-//            Toast.makeText(getApplicationContext(), "Synced with Firebase!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "It's a realtime database, you don't have to sync data manually.", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_share) {
             Intent intent = new Intent(Intent.ACTION_SEND);
@@ -248,7 +237,7 @@ public class MainActivity extends AppCompatActivity
             sharedPreferences.edit().putBoolean("isLoggedIn", false).apply();
 
             // TODO Reminder
-//            BattutaReminder.removeAllReminders(getApplicationContext(), FireDB.upcommingTrips);
+            BattutaReminder.removeAllReminders(getApplicationContext(), fireDB.upcommingTrips);
 
             // move user to login screen
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -269,10 +258,9 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (requestCode == TRIP_INFO_REQUEST) {
             if (resultCode == RESULT_OK) {
-                // TODO Reminder
-//                BattutaReminder.deleteReminder(getApplicationContext(), selectedTrip.getId());
                 // TODO FireDB deleteTrip function
-//                myDBhelper.deleteTrip(selectedTrip);
+                FireDB.deleteTrip(selectedTrip);
+                BattutaReminder.deleteReminder(getApplicationContext(), selectedTrip.getId());
                 Snackbar.make(findViewById(R.id.content_main), R.string.snackbar_trip_deleted, Snackbar.LENGTH_SHORT).show();
             }
         }
@@ -280,15 +268,16 @@ public class MainActivity extends AppCompatActivity
 
     void updateListView() {
 
-        int showNotice = FireDB.selectedTrips.size() == 0 ? View.VISIBLE : View.INVISIBLE;
-        emptyListNotice.setVisibility(showNotice);
-
         tripList = doneflag == 0? FireDB.upcommingTrips: FireDB.passedTrips;
+
+        int showNotice = tripList.size() == 0 ? View.VISIBLE : View.INVISIBLE;
+        emptyListNotice.setVisibility(showNotice);
 
         myCashedAdapter.clear();
         myCashedAdapter.addAll(tripList);
         myCashedAdapter.notifyDataSetChanged();
+
         // TODO Reminder
-//        BattutaReminder.updateAllReminders(getApplicationContext(), FireDB.upcommingTrips);
+        BattutaReminder.updateAllReminders(getApplicationContext(), FireDB.upcommingTrips);
     }
 }

@@ -252,7 +252,6 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         // TODO firebase update trip
         FireDB fireDB = FireDB.getInstance();
         fireDB.updateTrip(editedTrip.getId(), getTripData());
-//        mDBhelper.updateTrip(editedTrip.getId(), getTripData());
     }
 
     private void checkSaveOrEdit() {
@@ -262,7 +261,6 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         if (intentTrip == null) return;
 
         editedTrip = intentTrip;
-//        editedTrip.setId(mDBhelper.getTripID(editedTrip));
         titleET.setText(editedTrip.getTitle());
 
         String startPoint = editedTrip.getStartPoint();

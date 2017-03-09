@@ -3,7 +3,6 @@ package iti_edu.battuta;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -181,7 +180,6 @@ public class TripInfoActivity extends AppCompatActivity {
                 if (isChecked) {
                     trip.setIsDone(0);
                     Toast.makeText(getApplicationContext(), "Your trip is set as not done!", Toast.LENGTH_SHORT).show();
-//                    finish();
                 } else {
                     if (trip.getIsRound() == 1) {
                         trip.setIsRound(0);
@@ -190,7 +188,6 @@ public class TripInfoActivity extends AppCompatActivity {
                     } else {
                         trip.setIsDone(1);
                         Toast.makeText(getApplicationContext(), "Your trip is set as done!", Toast.LENGTH_SHORT).show();
-//                        finish();
                     }
                 }
                 finish();
@@ -202,8 +199,8 @@ public class TripInfoActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         // TODO firebase update trip on exit
-//        BattutaDBadapter mDBhelper = new BattutaDBadapter(getApplicationContext());
-//        mDBhelper.updateTrip(trip.getId(), trip);
+        FireDB fireDB = FireDB.getInstance();
+        fireDB.updateTrip(trip.getId(), trip);
     }
 
 
