@@ -75,7 +75,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private BattutaDBadapter mDBhelper;
 
     private static final String EMAIL_PATTERN =
                      "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -369,41 +368,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
-    }
-
-    void getTripsFromFirebase(){
-
-        String userEmail = mEmailView.getText().toString();
-        String[] username = userEmail.split("@");
-
-        mDBhelper = new BattutaDBadapter(getApplicationContext());
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference userDB = database.getReference().child(username[0]);
-
-        showProgressDialog();
-        userDB.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChildren()) {
-                    for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                        Trip trip = messageSnapshot.getValue(Trip.class);
-                        mDBhelper.insertTrip(trip);
-                        Log.i("ptr-Login", "a new trip has been added " + trip.getId());
-                    }
-                    Toast.makeText(getApplicationContext(), "Trips has been retrieved", Toast.LENGTH_SHORT).show();
-                    hideProgressDialog();
-                }else{
-                    hideProgressDialog();
-                    Toast.makeText(getApplicationContext(), "Welcome to Battuta!", Toast.LENGTH_SHORT).show();
-                }
-                launchMainActivity();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "Disconnected from database!", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void launchMainActivity(){

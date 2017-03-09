@@ -11,6 +11,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Trip trip = (Trip) intent.getSerializableExtra("trip");
-        BattutaReminder.showNotification(context, trip);
+        BattutaReminder.showNotification(context.getApplicationContext(), trip);
     }
 }

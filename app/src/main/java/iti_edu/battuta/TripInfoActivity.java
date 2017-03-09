@@ -66,10 +66,9 @@ public class TripInfoActivity extends AppCompatActivity {
         Button deleteBtn = (Button) findViewById(R.id.info_deleteBtn);
 
         if (isFromNotification) {
-            BattutaDBadapter myDBhelper = new BattutaDBadapter(this);
             Intent sourceIntent = getIntent();
             Trip selectedTrip = (Trip) sourceIntent.getSerializableExtra("trip");
-            BattutaReminder.deleteReminder(getApplicationContext(), myDBhelper.getTripID(selectedTrip));
+            BattutaReminder.deleteReminder(getApplicationContext(), selectedTrip.getId());
             editBtn.setText(R.string.remind_later);
             editBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

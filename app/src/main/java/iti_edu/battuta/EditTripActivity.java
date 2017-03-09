@@ -35,8 +35,6 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     private static final String TAG = "ptr-editTrip";
     private static final int PICK_START = 1, PICK_END = 2;
 
-
-    private BattutaDBadapter mDBhelper;
     private GoogleApiClient mGoogleApiClient;
 
     TimePickerDialog timePickerDialog;
@@ -62,8 +60,6 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         setContentView(R.layout.activity_edit_trip);
 
         calendar = Calendar.getInstance();
-
-        mDBhelper = new BattutaDBadapter(getApplicationContext());
 
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)

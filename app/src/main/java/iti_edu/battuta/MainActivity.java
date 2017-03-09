@@ -3,6 +3,7 @@ package iti_edu.battuta;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -64,12 +65,26 @@ public class MainActivity extends AppCompatActivity
         initUI();
         initListView();
         initFireDB();
+
+        Intent sourceIntent = getIntent();
+        boolean isFromNotification = sourceIntent.getBooleanExtra("isFromNotification", false);
+        if (isFromNotification) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("trip", (Serializable) sourceIntent.getSerializableExtra("trip"));
+            intent.putExtra("isFromNotification", true);
+            startActivity(intent);
+        }
     }
 
     private void initUI() {
+        SharedPreferences colorPrefs = getSharedPreferences("ThemeInfo", Context.MODE_PRIVATE);
+        boolean changeColors = colorPrefs.getBoolean("changeTheme", false);
+        String color = changeColors ? "#660000" : "#3f51b5";
+
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.upcoming);
+        toolbar.setBackgroundColor(Color.parseColor(color));
         setSupportActionBar(toolbar);
 
         emptyListNotice = (TextView) findViewById(R.id.emptyNoticeTV);
@@ -268,7 +283,7 @@ public class MainActivity extends AppCompatActivity
 
     void updateListView() {
 
-        tripList = doneflag == 0? FireDB.upcommingTrips: FireDB.passedTrips;
+        tripList = doneflag == 0 ? FireDB.upcommingTrips : FireDB.passedTrips;
 
         int showNotice = tripList.size() == 0 ? View.VISIBLE : View.INVISIBLE;
         emptyListNotice.setVisibility(showNotice);

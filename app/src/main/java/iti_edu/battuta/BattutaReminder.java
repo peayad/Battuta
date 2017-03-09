@@ -75,8 +75,6 @@ class BattutaReminder {
     }
 
     static void showNotification(Context context, Trip trip) {
-        // This function was made by fatma ali to create a notification
-
         String tripInfo = trip.getEndPoint() + "\n" + trip.getDateTime();
 
         //Build the content of Notification
@@ -99,7 +97,6 @@ class BattutaReminder {
             e.printStackTrace();
         }
 
-
         //provide Explicit intent,pending Intent and Back Stack Task Builder for Action Buttons
         Intent intent = new Intent(context, TripInfoActivity.class);
         intent.putExtra("trip", (Serializable) trip);
@@ -107,10 +104,10 @@ class BattutaReminder {
 
         //Add the Back Stack using TaskBuilder and set the Intent to Pending Intent
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(TripInfoActivity.class);
+        stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(intent);
 
-        PendingIntent pi = stackBuilder.getPendingIntent(trip.getId(), PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pi = stackBuilder.getPendingIntent(trip.getId(), PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pi);
 
         // Notification through notification Manage
