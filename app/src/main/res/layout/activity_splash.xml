@@ -18,8 +18,7 @@
         android:textSize="12sp"
         android:textAlignment="center"
         android:gravity="bottom|center_vertical|center_horizontal"
-        android:paddingBottom="30dp"
-        android:onClick="launchNextActivity"/>
+        android:paddingBottom="30dp"/>
 
     <ScrollView
         android:layout_width="match_parent"

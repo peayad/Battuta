@@ -2,6 +2,8 @@ package iti_edu.battuta;
 
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -11,8 +13,12 @@ public class FireDB {
 
     final private static String TAG = "ptr-FireDB";
 
+    public static FirebaseAuth mAuth;
+    public static FirebaseUser user;
+
     public static FirebaseDatabase firebaseDatabase;
     public static DatabaseReference userDB_ref;
+//    public static userID;
 
     public static ArrayList<Trip> tripList = new ArrayList<>();
     public static ArrayList<Trip> upcommingTrips = new ArrayList<>();
@@ -28,13 +34,16 @@ public class FireDB {
     }
 
     private FireDB() {
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
         tripList = new ArrayList<>();
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseDatabase.setPersistenceEnabled(true); // allow us to save data offline
-
-        // TODO change reference string to userID from Firebase authentication
-        userDB_ref = firebaseDatabase.getReference().child("peayad");
+        String email = user.getEmail();
+        String username = email.split("@")[0] + (email.split("@")[1]).split("\\.")[0] + (email.split("@")[1]).split("\\.")[1]; // store user's data under his unique email
+        userDB_ref = firebaseDatabase.getReference().child(username);
     }
 
     public static void updateTripLists(ArrayList<Trip> newList) {
@@ -81,10 +90,10 @@ public class FireDB {
         Log.i(TAG, trip.getId() + " " + trip.getTitle());
     }
 
-    private static int getNewId(){
+    private static int getNewId() {
         int min = 1000000;
         int max = 9999999;
-        int randomNum = min + (int)(Math.random() * max);
+        int randomNum = min + (int) (Math.random() * max);
         return randomNum;
     }
 }

@@ -25,6 +25,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -43,14 +45,13 @@ public class MainActivity extends AppCompatActivity
     final static private int ADD_TRIP_REQUEST = 0;
     final static private int TRIP_INFO_REQUEST = 1;
 
+    private FirebaseAuth mAuth;
+
     TextView emptyListNotice;
 
     FireDB fireDB;
     private CashedAdapter myCashedAdapter;
     private ArrayList<Trip> tripList = new ArrayList<>();
-
-
-    SharedPreferences loginPreferences;
 
     boolean doubleBackToExitPressedOnce;
 
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        loginPreferences = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
+        mAuth = FirebaseAuth.getInstance();
 
         initUI();
         initListView();
@@ -107,14 +108,18 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        String email = loginPreferences.getString("email", "");
-        View headerView = navigationView.getHeaderView(0);
-        TextView emailTV = (TextView) headerView.findViewById(R.id.tvUserEmail);
-        emailTV.setText(email);
+        FirebaseUser user = mAuth.getCurrentUser();
+        if(user != null) {
+            String email = user.getEmail();
+            View headerView = navigationView.getHeaderView(0);
+            TextView emailTV = (TextView) headerView.findViewById(R.id.tvUserEmail);
+            emailTV.setText(email);
 
-        String[] username = email.split("@");
-        TextView usernameTv = (TextView) headerView.findViewById(R.id.tvUsername);
-        usernameTv.setText(username[0]);
+            // TODO change it with username instead of splitting email
+            String[] username = email.split("@");
+            TextView usernameTv = (TextView) headerView.findViewById(R.id.tvUsername);
+            usernameTv.setText(username[0]);
+        }
     }
 
     private void initListView() {
@@ -140,16 +145,13 @@ public class MainActivity extends AppCompatActivity
         FireDB.userDB_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChildren()) {
-                    ArrayList<Trip> tempList = new ArrayList<Trip>();
-                    for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                        Trip trip = messageSnapshot.getValue(Trip.class);
-                        tempList.add(trip);
-                    }
-                    FireDB.updateTripLists(tempList);
-                    updateListView();
+                ArrayList<Trip> tempList = new ArrayList<Trip>();
+                for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
+                    Trip trip = messageSnapshot.getValue(Trip.class);
+                    tempList.add(trip);
                 }
-
+                FireDB.updateTripLists(tempList);
+                updateListView();
                 Toast.makeText(getApplicationContext(), "Trips has been updated", Toast.LENGTH_SHORT).show();
             }
 
@@ -247,11 +249,10 @@ public class MainActivity extends AppCompatActivity
             aboutDialog.show();
 
         } else if (id == R.id.nav_logout) {
-            // remove flag from shared preferences
-            SharedPreferences sharedPreferences = getSharedPreferences("LoginInfo", Context.MODE_PRIVATE);
-            sharedPreferences.edit().putBoolean("isLoggedIn", false).apply();
+            // signout from firebase
+            FirebaseAuth.getInstance().signOut();
 
-            // TODO Reminder
+            // remove all alarms from alarm manager
             BattutaReminder.removeAllReminders(getApplicationContext(), fireDB.upcommingTrips);
 
             // move user to login screen
