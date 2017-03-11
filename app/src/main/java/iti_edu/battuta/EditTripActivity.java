@@ -3,12 +3,14 @@ package iti_edu.battuta;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -57,6 +59,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initTheme();
         setContentView(R.layout.activity_edit_trip);
 
         calendar = Calendar.getInstance();
@@ -73,6 +76,24 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         initDateTime();
         initButtons();
         checkSaveOrEdit();
+
+        if(isEditingTrip){
+            getSupportActionBar().setTitle("Editing Trip");
+        }else{
+            getSupportActionBar().setTitle("Creating New Trip");
+        }
+    }
+
+    private void initTheme(){
+        SharedPreferences themePrefs = getSharedPreferences("ThemeInfo", Context.MODE_PRIVATE);
+        boolean changeTheme = themePrefs.getBoolean("changeTheme", false);
+        int theme;
+        if(changeTheme) {
+            theme = R.style.AppThemenew;
+        }else{
+            theme = R.style.AppTheme;
+        }
+        setTheme(theme);
     }
 
     void initEditTexts() {

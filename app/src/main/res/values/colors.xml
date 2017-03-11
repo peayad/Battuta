@@ -8,5 +8,19 @@
     <color name="alt_colorPrimaryDark">#7a309f</color>
     <color name="alt_colorAccent">#ffbf40</color>
 
+    <!--TODO THEME-->
+    <color name="colorPrimary1">#b53f91</color>
+    <color name="colorPrimaryDark1">#9f3072</color>
+    <color name="colorAccent1">#ffbf40</color>
+
+
+    <color name="colorPrimary2">#8a3fb5</color>
+    <color name="colorPrimaryDark2">#7a309f</color>
+    <color name="colorAccent2">#ffbf40</color>
+
+    <color name="test">#D32F2F</color>
+    <color name="test2">#B71C1C</color>
+    <color name="test3">#a0b71c1c</color>
+
     <color name="black_overlay">#66000000</color>
 </resources>

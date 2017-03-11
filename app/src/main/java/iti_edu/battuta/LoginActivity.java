@@ -1,6 +1,8 @@
 package iti_edu.battuta;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -49,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initTheme();
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
@@ -96,6 +99,18 @@ public class LoginActivity extends AppCompatActivity {
 
         initGoogleLogin();
         initFacebookLogin();
+    }
+
+    private void initTheme(){
+        SharedPreferences themePrefs = getSharedPreferences("ThemeInfo", Context.MODE_PRIVATE);
+        boolean changeTheme = themePrefs.getBoolean("changeTheme", false);
+        int theme;
+        if(changeTheme) {
+            theme = R.style.AppThemenew;
+        }else{
+            theme = R.style.AppTheme;
+        }
+        setTheme(theme);
     }
 
     private void initFacebookLogin() {

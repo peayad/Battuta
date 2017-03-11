@@ -1,7 +1,9 @@
 package iti_edu.battuta;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +28,7 @@ public class TripInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initTheme();
         setContentView(R.layout.info_trip_dialog);
 
         Intent sourceIntent = getIntent();
@@ -37,6 +40,18 @@ public class TripInfoActivity extends AppCompatActivity {
         initSwitch();
 
         if (isFromNotification) trip.setIsDone(1);
+    }
+
+    private void initTheme(){
+        SharedPreferences themePrefs = getSharedPreferences("ThemeInfo", Context.MODE_PRIVATE);
+        boolean changeTheme = themePrefs.getBoolean("changeTheme", false);
+        int theme;
+        if(changeTheme) {
+            theme = R.style.Theme_AppCompat_Translucentnew;
+        }else{
+            theme = R.style.Theme_AppCompat_Translucent;
+        }
+        setTheme(theme);
     }
 
     void initTextViews() {

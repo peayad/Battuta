@@ -45,7 +45,8 @@
             android:name=".MainActivity"
             android:label="Battuta"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EditTripActivity" />
+        <activity android:name=".EditTripActivity"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".TripInfoActivity"
             android:excludeFromRecents="true"

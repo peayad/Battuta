@@ -23,7 +23,7 @@
             android:gravity="center"
             android:keepScreenOn="true"
             android:text="Battuta\nTrip Planner"
-            android:textColor="@color/colorPrimary"
+            android:textColor="?attr/colorPrimary"
             android:textSize="50sp"
             android:textStyle="bold" />
 

@@ -62,7 +62,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
-
+        initTheme();
+        setContentView(R.layout.activity_main);
         initUI();
         initListView();
         initFireDB();
@@ -77,15 +78,21 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void initUI() {
-        SharedPreferences colorPrefs = getSharedPreferences("ThemeInfo", Context.MODE_PRIVATE);
-        boolean changeColors = colorPrefs.getBoolean("changeTheme", false);
-        String color = changeColors ? "#660000" : "#3f51b5";
+    private void initTheme() {
+        SharedPreferences themePrefs = getSharedPreferences("ThemeInfo", Context.MODE_PRIVATE);
+        boolean changeTheme = themePrefs.getBoolean("changeTheme", false);
+        int theme;
+        if (changeTheme) {
+            theme = R.style.AppThemenew_NoActionBarnew;
+        } else {
+            theme = R.style.AppTheme_NoActionBar;
+        }
+        setTheme(theme);
+    }
 
-        setContentView(R.layout.activity_main);
+    private void initUI() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.upcoming);
-        toolbar.setBackgroundColor(Color.parseColor(color));
         setSupportActionBar(toolbar);
 
         emptyListNotice = (TextView) findViewById(R.id.emptyNoticeTV);
@@ -109,7 +116,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         FirebaseUser user = mAuth.getCurrentUser();
-        if(user != null) {
+        if (user != null) {
             String email = user.getEmail();
             View headerView = navigationView.getHeaderView(0);
             TextView emailTV = (TextView) headerView.findViewById(R.id.tvUserEmail);

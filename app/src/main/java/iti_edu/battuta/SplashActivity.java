@@ -24,6 +24,9 @@ public class SplashActivity extends AppCompatActivity {
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
 
+    SharedPreferences themePrefs;
+    static int theme = R.style.AppTheme;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-
+        initTheme();
         initRemoteConfig();
 
         setContentView(R.layout.activity_splash);
@@ -46,6 +49,19 @@ public class SplashActivity extends AppCompatActivity {
                         finish();
                     }
                 }, 3000);
+    }
+
+    private void initTheme(){
+        themePrefs = getSharedPreferences("ThemeInfo", Context.MODE_PRIVATE);
+        boolean changeTheme = themePrefs.getBoolean("changeTheme", false);
+
+        if(changeTheme) {
+            theme = R.style.AppThemenew_NoActionBarnew;
+        }else{
+            theme = R.style.AppTheme_NoActionBar;
+        }
+
+        setTheme(theme);
     }
 
     private void initQuotes() {
@@ -86,7 +102,6 @@ public class SplashActivity extends AppCompatActivity {
 
     private void changeTheme() {
         boolean changeTheme = mFirebaseRemoteConfig.getBoolean("changeColor");
-        SharedPreferences prefs = getSharedPreferences("ThemeInfo", Context.MODE_PRIVATE);
-        prefs.edit().putBoolean("changeTheme", changeTheme).apply();
+        themePrefs.edit().putBoolean("changeTheme", changeTheme).apply();
     }
 }
