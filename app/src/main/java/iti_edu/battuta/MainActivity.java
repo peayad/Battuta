@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity
         Intent sourceIntent = getIntent();
         boolean isFromNotification = sourceIntent.getBooleanExtra("isFromNotification", false);
         if (isFromNotification) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, TripInfoActivity.class);
             intent.putExtra("trip", (Serializable) sourceIntent.getSerializableExtra("trip"));
             intent.putExtra("isFromNotification", true);
             startActivity(intent);
@@ -151,8 +151,10 @@ public class MainActivity extends AppCompatActivity
                     tempList.add(trip);
                 }
                 FireDB.updateTripLists(tempList);
+                BattutaReminder.updateAllReminders(getApplicationContext(), FireDB.upcommingTrips);
                 updateListView();
                 Toast.makeText(getApplicationContext(), "Trips has been updated", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -294,6 +296,6 @@ public class MainActivity extends AppCompatActivity
         myCashedAdapter.notifyDataSetChanged();
 
         // TODO Reminder
-        BattutaReminder.updateAllReminders(getApplicationContext(), FireDB.upcommingTrips);
+//        BattutaReminder.updateAllReminders(getApplicationContext(), FireDB.upcommingTrips);
     }
 }

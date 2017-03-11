@@ -98,20 +98,23 @@ class BattutaReminder {
         }
 
         //provide Explicit intent,pending Intent and Back Stack Task Builder for Action Buttons
-        Intent intent = new Intent(context, TripInfoActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("trip", (Serializable) trip);
         intent.putExtra("isFromNotification", true);
 
         //Add the Back Stack using TaskBuilder and set the Intent to Pending Intent
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(intent);
+//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+//        stackBuilder.addParentStack(MainActivity.class);
+//        stackBuilder.addNextIntent(intent);
 
-        PendingIntent pi = stackBuilder.getPendingIntent(trip.getId(), PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent pi = stackBuilder.getPendingIntent(trip.getId(), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = PendingIntent.getActivity(context,trip.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pi);
 
         // Notification through notification Manage
         Notification notification = builder.build();
+        notification.flags = Notification.FLAG_ONGOING_EVENT;
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(trip.getId(), notification);
     }
