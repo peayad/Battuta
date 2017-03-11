@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +36,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         initTheme();
+        setupWindowAnimation();
         setContentView(R.layout.activity_signup);
 
         mAuth = FirebaseAuth.getInstance();
@@ -60,13 +63,13 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    private void initTheme(){
+    private void initTheme() {
         SharedPreferences themePrefs = getSharedPreferences("ThemeInfo", Context.MODE_PRIVATE);
         boolean changeTheme = themePrefs.getBoolean("changeTheme", false);
         int theme;
-        if(changeTheme) {
+        if (changeTheme) {
             theme = R.style.AppThemenew;
-        }else{
+        } else {
             theme = R.style.AppTheme;
         }
         setTheme(theme);
@@ -117,7 +120,6 @@ public class SignupActivity extends AppCompatActivity {
 
     public void onSignupFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
         signupBtn.setEnabled(true);
     }
 
@@ -150,5 +152,12 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    private void setupWindowAnimation(){
+        Slide exitAnim = new Slide(Gravity.LEFT);
+        Slide enterAnim = new Slide(Gravity.RIGHT);
+        getWindow().setExitTransition(exitAnim);
+        getWindow().setEnterTransition(enterAnim);
     }
 }

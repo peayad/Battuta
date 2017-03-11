@@ -15,7 +15,9 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -60,6 +62,7 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initTheme();
+        setupWindowAnimation();
         setContentView(R.layout.activity_edit_trip);
 
         calendar = Calendar.getInstance();
@@ -304,5 +307,12 @@ public class EditTripActivity extends AppCompatActivity implements GoogleApiClie
         return startAddress == null || endAddress == null ||
                 titleET.getText().toString().equals("") || dateTimeET.getText().toString().equals("");
 
+    }
+
+    private void setupWindowAnimation(){
+        Slide exitAnim = new Slide(Gravity.LEFT);
+        Slide enterAnim = new Slide(Gravity.RIGHT);
+        getWindow().setExitTransition(exitAnim);
+        getWindow().setEnterTransition(enterAnim);
     }
 }

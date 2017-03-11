@@ -5,10 +5,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.transition.Fade;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Slide;
+import android.transition.TransitionInflater;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,6 +34,7 @@ public class TripInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initTheme();
+        setupWindowAnimation();
         setContentView(R.layout.info_trip_dialog);
 
         Intent sourceIntent = getIntent();
@@ -259,6 +265,13 @@ public class TripInfoActivity extends AppCompatActivity {
         */
         String dir = String.format("https://www.google.com/maps?saddr=%s&daddr=%s", trip.getStartPoint(), trip.getEndPoint());
         return Uri.parse(dir);
+    }
+
+    private void setupWindowAnimation(){
+        Slide exitAnim = new Slide(Gravity.LEFT);
+        Slide enterAnim = new Slide(Gravity.RIGHT);
+        getWindow().setExitTransition(exitAnim);
+        getWindow().setEnterTransition(enterAnim);
     }
 
 }

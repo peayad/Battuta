@@ -10,10 +10,7 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -109,18 +106,18 @@ public class SplashActivity extends AppCompatActivity {
         themePrefs.edit().putBoolean("changeTheme", changeTheme).apply();
     }
 
-    private boolean checkPlayServices() {
-        GoogleApiAvailability gApi = GoogleApiAvailability.getInstance();
-        int resultCode = gApi.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (gApi.isUserResolvableError(resultCode)) {
-                gApi.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Toast.makeText(this, "You need to install the latest version of GooglePlay services to use this application", Toast.LENGTH_LONG).show();
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
+//    private boolean checkPlayServices() {
+//        GoogleApiAvailability gApi = GoogleApiAvailability.getInstance();
+//        int resultCode = gApi.isGooglePlayServicesAvailable(this);
+//        if (resultCode != ConnectionResult.SUCCESS) {
+//            if (gApi.isUserResolvableError(resultCode)) {
+//                gApi.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+//            } else {
+//                Toast.makeText(this, "You need to install the latest version of GooglePlay services to use this application", Toast.LENGTH_LONG).show();
+//                finish();
+//            }
+//            return false;
+//        }
+//        return true;
+//    }
 }

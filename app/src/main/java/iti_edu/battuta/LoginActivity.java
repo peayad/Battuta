@@ -1,14 +1,17 @@
 package iti_edu.battuta;
 
+import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Slide;
 import android.util.Log;
 
 import android.content.Intent;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initTheme();
+        setupWindowAnimation();
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
@@ -94,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                 // Start the Signup activity
                 Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
+                overridePendingTransition(R.anim.push_out_left, R.anim.pull_in_right);
             }
         });
 
@@ -101,13 +106,13 @@ public class LoginActivity extends AppCompatActivity {
         initFacebookLogin();
     }
 
-    private void initTheme(){
+    private void initTheme() {
         SharedPreferences themePrefs = getSharedPreferences("ThemeInfo", Context.MODE_PRIVATE);
         boolean changeTheme = themePrefs.getBoolean("changeTheme", false);
         int theme;
-        if(changeTheme) {
+        if (changeTheme) {
             theme = R.style.AppThemenew;
-        }else{
+        } else {
             theme = R.style.AppTheme;
         }
         setTheme(theme);
@@ -279,5 +284,12 @@ public class LoginActivity extends AppCompatActivity {
         if (mAuthListener != null) {
             mAuth.addAuthStateListener(mAuthListener);
         }
+    }
+
+    private void setupWindowAnimation(){
+        Slide exitAnim = new Slide(Gravity.LEFT);
+        Slide enterAnim = new Slide(Gravity.RIGHT);
+        getWindow().setExitTransition(exitAnim);
+        getWindow().setEnterTransition(enterAnim);
     }
 }

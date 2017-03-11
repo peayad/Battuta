@@ -1,5 +1,6 @@
 package iti_edu.battuta;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +11,9 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatDialog;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -103,6 +106,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), EditTripActivity.class);
                 startActivityForResult(intent, ADD_TRIP_REQUEST);
+                overridePendingTransition(R.anim.push_out_left, R.anim.pull_in_right);
             }
         });
 
@@ -142,7 +146,7 @@ public class MainActivity extends AppCompatActivity
                 selectedTrip = tripList.get(position);
                 Intent intent = new Intent(getApplicationContext(), TripInfoActivity.class);
                 intent.putExtra("trip", (Serializable) selectedTrip);
-                startActivityForResult(intent, TRIP_INFO_REQUEST);
+                startActivityForResult(intent, TRIP_INFO_REQUEST, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
         });
     }
