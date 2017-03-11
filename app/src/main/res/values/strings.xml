@@ -18,6 +18,7 @@
     </array>
 
     <string name="touch_anywhere">Touch anywhere to continue</string>
+    <string name="loading">Loading …</string>
 
     <!-- Strings related to login -->
 

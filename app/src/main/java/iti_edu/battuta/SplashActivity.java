@@ -12,6 +12,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -21,6 +23,8 @@ import java.util.Random;
 
 
 public class SplashActivity extends AppCompatActivity {
+
+    final private int PLAY_SERVICES_RESOLUTION_REQUEST = 0;
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
 
@@ -36,8 +40,8 @@ public class SplashActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         initTheme();
+//        checkPlayServices();
         initRemoteConfig();
-
         setContentView(R.layout.activity_splash);
         initQuotes();
 
@@ -51,13 +55,13 @@ public class SplashActivity extends AppCompatActivity {
                 }, 3000);
     }
 
-    private void initTheme(){
+    private void initTheme() {
         themePrefs = getSharedPreferences("ThemeInfo", Context.MODE_PRIVATE);
         boolean changeTheme = themePrefs.getBoolean("changeTheme", false);
 
-        if(changeTheme) {
+        if (changeTheme) {
             theme = R.style.AppThemenew_NoActionBarnew;
-        }else{
+        } else {
             theme = R.style.AppTheme_NoActionBar;
         }
 
@@ -90,10 +94,10 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(SplashActivity.this, "Fetch Succeeded", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(SplashActivity.this, "Fetch Succeeded", Toast.LENGTH_SHORT).show();
                             mFirebaseRemoteConfig.activateFetched();
                         } else {
-                            Toast.makeText(SplashActivity.this, "Fetch Failed", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(SplashActivity.this, "Fetch Failed", Toast.LENGTH_SHORT).show();
                         }
                         changeTheme();
                     }
@@ -103,5 +107,20 @@ public class SplashActivity extends AppCompatActivity {
     private void changeTheme() {
         boolean changeTheme = mFirebaseRemoteConfig.getBoolean("changeColor");
         themePrefs.edit().putBoolean("changeTheme", changeTheme).apply();
+    }
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability gApi = GoogleApiAvailability.getInstance();
+        int resultCode = gApi.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (gApi.isUserResolvableError(resultCode)) {
+                gApi.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Toast.makeText(this, "You need to install the latest version of GooglePlay services to use this application", Toast.LENGTH_LONG).show();
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 }

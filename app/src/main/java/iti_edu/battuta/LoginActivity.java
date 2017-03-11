@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        progressDialog = new ProgressDialog(LoginActivity.this, R.style.DialogTheme);
+        progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
 

@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity
                 FireDB.updateTripLists(tempList);
                 BattutaReminder.updateAllReminders(getApplicationContext(), FireDB.upcommingTrips);
                 updateListView();
-                Toast.makeText(getApplicationContext(), "Trips has been updated", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Trips has been updated", Toast.LENGTH_SHORT).show();
 
             }
 

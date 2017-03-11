@@ -98,7 +98,7 @@ class BattutaReminder {
         }
 
         //provide Explicit intent,pending Intent and Back Stack Task Builder for Action Buttons
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, TripInfoActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("trip", (Serializable) trip);
         intent.putExtra("isFromNotification", true);

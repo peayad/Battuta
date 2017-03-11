@@ -38,8 +38,6 @@ public class TripInfoActivity extends AppCompatActivity {
         initTextViews();
         initButtons();
         initSwitch();
-
-        if (isFromNotification) trip.setIsDone(1);
     }
 
     private void initTheme(){
@@ -80,24 +78,30 @@ public class TripInfoActivity extends AppCompatActivity {
         Button editBtn = (Button) findViewById(R.id.info_editBtn);
         Button deleteBtn = (Button) findViewById(R.id.info_deleteBtn);
 
+        // act as notification dialog
         if (isFromNotification) {
             Intent sourceIntent = getIntent();
             Trip selectedTrip = (Trip) sourceIntent.getSerializableExtra("trip");
+//            trip.setId(1);
             BattutaReminder.deleteReminder(getApplicationContext(), selectedTrip.getId());
+
+            // later button
             editBtn.setText(R.string.remind_later);
             editBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    trip.setIsDone(0);
                     BattutaReminder.showNotification(getApplicationContext(), trip);
                     finish();
                 }
             });
 
+            // dismiss button
             deleteBtn.setText(R.string.remind_dismiss);
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    finish();
+                    showDismissConfirmationDialog();
                 }
             });
 
@@ -217,6 +221,36 @@ public class TripInfoActivity extends AppCompatActivity {
         fireDB.updateTrip(trip.getId(), trip);
     }
 
+    @Override
+    public void onBackPressed() {
+        if(isFromNotification){
+            showDismissConfirmationDialog();
+        }else {
+            super.onBackPressed();
+        }
+    }
+
+    private void showDismissConfirmationDialog(){
+        AlertDialog.Builder a_builder = new AlertDialog.Builder(TripInfoActivity.this);
+        a_builder.setMessage("You are going to dismiss this trip,\n are you sure?!")
+                .setCancelable(false)
+                .setPositiveButton("Dismiss Trip", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        trip.setIsDone(1);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = a_builder.create();
+        alert.setTitle("Dismiss Trip");
+        alert.show();
+    }
 
     Uri getDirectionsURI() {
         /*
